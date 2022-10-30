@@ -30,7 +30,7 @@ export function get(prefix: string, path: string | object, body: object | string
   )
 }
 
-export function post(prefix: string, path: string | object, body?: object | string, options?: object) {
+export function post<T = any>(prefix: string, path: string | object, body?: object | string, options?: object): Promise<T> {
   let mergedPath = ''
 
   if (!prefixes.includes(prefix)) {

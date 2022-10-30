@@ -10,13 +10,13 @@ export const useLoading = defineStore('loading', {
       loading: new Set(),
     } as State),
   actions: {
-    addLoading(...items: Array<string>) {
+    set(...items: Array<string>) {
       if (items.length > 0) {
         for (const item of items)
           this.loading.add(item)
       }
     },
-    delLoading(...items: Array<string>) {
+    del(...items: Array<string>) {
       if (items.length > 0) {
         for (const item of items)
           this.loading.delete(item)
@@ -24,7 +24,7 @@ export const useLoading = defineStore('loading', {
     },
   },
   getters: {
-    getLoading:
+    get:
       state =>
         (...items: Array<string>) => {
           if (items && items.length > 0)

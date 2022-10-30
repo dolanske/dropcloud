@@ -9,6 +9,7 @@ import { useFolder } from '../../store/folder'
 
 import FileRow from '../../components/FileRow.vue'
 import FolderItem from '../../components/FolderItem.vue'
+import type { DbxFolder, DbxRequest, DbxStructure } from '../../types/dropbox-types'
 
 const url = `https://www.dropbox.com/oauth2/authorize?client_id=${APP_KEY}&redirect_uri=${redirect_uri}&response_type=token`
 
@@ -19,11 +20,11 @@ const folder = useFolder()
 const rootPath = '/music'
 
 // Recursively creates a nested object of folders and their subfolders
-const add = (source: any, target: any) => {
+const add = (source: string, target: Record<any, any>) => {
   // Splits path by nesting
   const paths = source.split('/')
   // Returns first item from path
-  const path = paths.shift()
+  const path = String(paths.shift())
 
   // { <path>: {...} || <path>}
   target[path] = target[path] || path
@@ -47,21 +48,25 @@ onMounted(async () => {
     if (isEmpty(folder.folders)) {
       // TODO: Ideally this would be a function
       // Should be a recursive loop until has_next is false
-      const batch1 = await post('/files/list_folder', {
+      const batch1 = await post<DbxRequest>('/files/list_folder', {
         path: rootPath,
         include_mounted_folders: true,
         recursive: true,
       })
 
-      const batch2 = await post('/files/list_folder/continue', { cursor: batch1.cursor })
+      const batch2 = await post<DbxRequest>('/files/list_folder/continue', { cursor: batch1.cursor })
       const allEntries = concat(batch1.entries, batch2.entries)
 
       if (allEntries) {
-        const structured: any = {}
-        const folders = allEntries.filter((item: any) => item['.tag'] === 'folder')
+        folder.$patch({ everything: allEntries })
+
+        const structured: DbxStructure = {}
+        // entry is type File
+        const folders = allEntries.filter((item: any) => item['.tag'] === 'folder') as DbxFolder[]
         folders.forEach(item => add(item.path_lower, structured))
 
-        const structure = Object.values(structured)[0] as {}
+        // The root folder is {'': {}} So we go one nesting deeper to avoid any issues
+        const structure = Object.values(structured)[0] as DbxStructure
 
         folder.updateStructure(folders, structure)
         // Set active folder as the first available one

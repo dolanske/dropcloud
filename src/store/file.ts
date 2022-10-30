@@ -1,6 +1,8 @@
 import { defineStore } from 'pinia'
 import { download, post } from '../bin/fetch'
 import { now } from '../bin/utils'
+import type { DbxFile } from '../types/dropbox-types'
+import { useLoading } from './loading'
 
 // TODO: Add interface for folder & file
 
@@ -13,9 +15,7 @@ interface State {
   }
   audio: HTMLAudioElement
   registry: Map<string, string>
-  loading: Set<string>
-
-  files: any[]
+  files: DbxFile[]
 }
 
 export const useFile = defineStore('file', {
@@ -29,13 +29,14 @@ export const useFile = defineStore('file', {
     },
     audio: document.createElement('audio'),
     registry: new Map(),
-    loading: new Set(),
-
     files: [],
 
   } as State),
   actions: {
     async fetchFilesFromPath(path: string) {
+      if (!path)
+        return
+
       await post('/files/list_folder', { path })
         .then((response) => {
           this.files = response.entries
@@ -43,11 +44,13 @@ export const useFile = defineStore('file', {
     },
 
     async dwFile(path: string) {
+      const loading = useLoading()
+
       // Do not download cached files
       if (this.registry.has(path))
         return Promise.resolve()
 
-      this.loading.add(path)
+      loading.set(path)
 
       // Download file from drobpx
       const file = download('/files/download', {
@@ -61,7 +64,7 @@ export const useFile = defineStore('file', {
           this.registry.set(path, audioUrl)
         })
         .finally(() => {
-          this.loading.delete(path)
+          loading.del(path)
         })
     },
 
@@ -109,6 +112,5 @@ export const useFile = defineStore('file', {
   getters: {
     getFileData: state => (path: string) => state.files.find((file: any) => file?.id === path),
     getAudioNode: state => (path: string) => state.registry.get(path),
-    isLoading: state => (key: string) => state.loading.has(key),
   },
 })

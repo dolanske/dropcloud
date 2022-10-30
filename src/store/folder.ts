@@ -1,21 +1,25 @@
 import { defineStore } from 'pinia'
+import type { DbxFile, DbxFolder, DbxStructure } from '../types/dropbox-types'
 
 interface State {
-  folders: any[]
-  folderStructure: Record<string, string | {}>
+  folders: DbxFolder[]
+  folderStructure: DbxStructure
   root: string
-  active: Record<string, any>
+  active: DbxFolder
+
+  everything: Array<DbxFolder | DbxFile>
 }
 
 export const useFolder = defineStore('folder', {
   state: () => ({
+    everything: [],
     folders: [],
     folderStructure: {},
     root: '',
-    active: {},
+    active: {} as DbxFolder,
   } as State),
   actions: {
-    updateStructure(folders: any[], structure: Record<string, string | {}>) {
+    updateStructure(folders: any[], structure: DbxStructure) {
       this.folders = folders
       this.folderStructure = structure
     },
@@ -33,6 +37,9 @@ export const useFolder = defineStore('folder', {
 
         return endOfPath === name
       })
+    },
+    getItemAmountInPath: state => (path: string) => {
+      return state.everything.filter(folder => !folder.path_lower.startsWith(path)).length
     },
   },
 })
