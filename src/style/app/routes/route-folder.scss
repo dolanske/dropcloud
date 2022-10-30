@@ -1,6 +1,5 @@
 .route-folder {
-  min-height: 100vh;
-  padding: 40px 0 84px;
+  // padding: 40px 0 84px;
 
   .route-header {
     padding-top: 40px;
@@ -8,38 +7,57 @@
 
   .route-content {
     .wrapper {
-      @include grid(20px, 292px 1fr);
-      // align-items: start;
+      @include grid(0, 316px 1fr);
+      min-height: 100vh;
     }
 
     .sidebar-wrapper {
       position: relative;
       height: 100%;
+      border-right: 1px solid var(--color-border);
+      padding: 20px;
+      padding-top: 40px;
+      padding-right: 20px;
+      background-color: var(--color-bg-light);
+
+      &:before {
+        content: "";
+        display: block;
+        top: 0;
+        bottom: 0;
+        position: absolute;
+        right: 100%;
+        width: 5000px;
+        background-color: var(--color-bg-light);
+      }
 
       aside {
-        @include radius(5px);
-        background-color: var(--color-bg-light);
-        padding: 20px 15px;
         position: sticky;
-        top: 20px;
+        top: 40px;
+        max-height: calc(100vh - 120px);
+        overflow-y: auto;
+        overflow-x: hidden;
 
         h4 {
           margin-bottom: 20px;
         }
 
         .folder-structure {
+          // margin-left: -5px;
           li {
             width: 100%;
-            margin-bottom: 4px;
+            // margin-bottom: 4px;
 
             & > ul {
-              padding-left: 12px;
+              padding-left: 15px;
             }
 
             &.is-active {
               button {
+                color: var(--color-primary);
+
                 &:after {
-                  opacity: 1;
+                  opacity: 0.2;
                   height: 100%;
                 }
 
@@ -47,44 +65,15 @@
                   color: var(--color-primary);
                 }
               }
-
-              & + li ul {
-                // border-left: 1px solid var(--color-primary);
-                // position: relative;
-
-                // &:before {
-                //   content: "";
-                //   position: absolute;
-                //   left: 15px;
-                //   top: 4px;
-                //   bottom: 16px;
-                //   border-left: 1px solid var(--color-border);
-                // }
-
-                // & > li:not(.folder-li) {
-                //   position: relative;
-
-                //   &:before {
-                //     content: "";
-                //     position: absolute;
-                //     left: 3px;
-                //     bottom: 50%;
-                //     width: 6px;
-                //     border-bottom: 1px solid var(--color-border);
-                //   }
-                // }
-              }
             }
 
             button {
               @include flex(10px, flex-start, center);
               @include font(400);
-              // height: 30px;
               width: 100%;
               text-align: left;
-
-              // line-height: 30px;
               padding: 5px 10px;
+              font-size: 1.2rem;
               position: relative;
               color: var(--color-text);
 
@@ -101,14 +90,20 @@
                 left: 0;
                 bottom: 0;
                 height: 0;
-                background-color: var(--color-bg);
+                background-color: var(--color-primary);
                 opacity: 0;
                 z-index: -1;
               }
 
-              &:hover:after {
-                opacity: 1;
-                height: 100%;
+              &:hover {
+                &:after {
+                  opacity: 0.3;
+                  height: 100%;
+                }
+
+                .material-icons {
+                  color: var(--color-primary);
+                }
               }
             }
           }
@@ -117,13 +112,16 @@
     }
 
     .table-wrapper {
+      padding-top: 40px;
+      padding-left: 20px;
+
       table {
         width: 100%;
         table-layout: fixed;
         border-collapse: collapse;
 
         thead tr th {
-          @include font(400);
+          @include font(200);
           text-align: left;
           font-size: 1.2rem;
           text-transform: uppercase;
@@ -180,14 +178,32 @@
             &.is-file {
               .material-icons {
                 @include t();
-                opacity: 0;
+                // opacity: 0;
+                color: var(--color-primary);
               }
             }
 
             &:first-of-type {
+              @include radius(5px 0 0 5px);
               padding-left: 10px;
               width: 40px;
-              // text-align: center;
+
+              .icon {
+                width: 20px;
+                height: 20px;
+                position: relative;
+
+                .material-icons {
+                  position: absolute;
+                  top: 50%;
+                  left: 50%;
+                  transform: translate(-50%, -50%);
+                }
+              }
+            }
+
+            &:last-of-type {
+              @include radius(0 5px 5px 0);
             }
           }
         }

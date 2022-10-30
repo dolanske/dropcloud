@@ -62,4 +62,9 @@ const { now } = Date
 
 export { now }
 
-export const getFormattedlength = (s = 1) => new Date(s * 1000).toISOString().substring(14, 19)
+export const getFormattedlength = (s = 1) => {
+  if (isNaN(s))
+    return '0:00'
+
+  return new Date(s * 1000).toISOString().substring(14, 19)
+}

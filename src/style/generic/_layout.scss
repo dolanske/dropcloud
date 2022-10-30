@@ -1,8 +1,12 @@
 .container {
   display: block;
   width: 100%;
-  max-width: 1024px;
+  max-width: 1180px;
   padding: 0 20px;
   margin: 0 auto;
   // margin-left: 192px;
+
+  &.container-player {
+    width: 1024px;
+  }
 }

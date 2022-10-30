@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, reactive, ref, watch } from 'vue'
+import { onMounted, reactive, ref, watch, watchEffect } from 'vue'
 import { concat, get, isEmpty, isNil, isObject, isObjectLike, set } from 'lodash'
 import { useState } from '../../store/state'
 import { APP_KEY, redirect_uri } from '../../config'
@@ -10,6 +10,7 @@ import { useFolder } from '../../store/folder'
 import FileRow from '../../components/FileRow.vue'
 import FolderItem from '../../components/FolderItem.vue'
 import type { DbxFolder, DbxRequest, DbxStructure } from '../../types/dropbox-types'
+import Breadcrumbs from '../../components/Breadcrumbs.vue'
 
 const url = `https://www.dropbox.com/oauth2/authorize?client_id=${APP_KEY}&redirect_uri=${redirect_uri}&response_type=token`
 
@@ -77,7 +78,7 @@ onMounted(async () => {
 })
 
 watch(() => folder.active, (value) => {
-  file.fetchFilesFromPath(value.path_lower)
+  file.fetchFilesFromPath(value.path_lower || rootPath)
 }, { immediate: true })
 </script>
 
@@ -96,6 +97,7 @@ watch(() => folder.active, (value) => {
             </aside>
           </div>
           <div class="table-wrapper">
+            <!-- <Breadcrumbs /> -->
             <table>
               <thead>
                 <tr>

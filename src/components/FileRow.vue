@@ -1,6 +1,6 @@
 <script setup lang='ts'>
 import { useDateFormat } from '@vueuse/shared'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { formatFileSize } from '../bin/utils'
 import { useFile } from '../store/file'
 import { useFolder } from '../store/folder'
@@ -8,12 +8,11 @@ import { useLoading } from '../store/loading'
 import type { DbxFile, DbxFolder } from '../types/dropbox-types'
 
 import Spinner from './global/Spinner.vue'
+import Eq from './global/Eq.vue'
 
 const props = defineProps<{
   file: DbxFolder | DbxFile
 }>()
-
-// import { post } from '../bin/fetch'
 
 const loading = useLoading()
 const files = useFile()
@@ -25,7 +24,7 @@ const size = computed(() => {
   if (props.file['.tag'] === 'file')
     return formatFileSize(props.file.size, 2)
 
-  return `${folder.getItemAmountInPath(props.file.path_lower)} `
+  return `${folder.getItemAmountInPath(props.file.path_lower)} files`
 })
 
 async function updateAudioState() {
@@ -37,17 +36,24 @@ function goToFile() {
   if (props.file['.tag'] === 'folder')
     folder.open(props.file.id)
 }
+
+const isPlaying = computed(() => props.file.id === files.audioState.path && files.audioState.playing)
+const hover = ref(false)
 </script>
 
 <template>
-  <tr>
+  <tr :class="{ 'is-active': isPlaying }" @mouseenter="hover = true" @mouseleave="hover = false">
     <td v-if="file['.tag'] === 'folder'" @click="goToFile()">
       <Icon code="e2c7" />
     </td>
     <td v-else class="is-file" @click="updateAudioState">
-      <Spinner v-if="loading.get(file.id)" />
-      <Icon v-else :code="file.id === files.audioState.path && files.audioState.playing ? 'e034' : 'e1c4'" />
-      <!-- <Icon v-else code="e1c4" /> -->
+      <div class="icon">
+        <Spinner v-if="loading.get(file.id)" />
+        <template v-else-if="hover">
+          <Icon :code="isPlaying ? 'e034' : 'e1c4'" />
+        </template>
+        <Eq v-else-if="isPlaying" />
+      </div>
     </td>
     <td @click="goToFile()">
       {{ file.name }}

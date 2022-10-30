@@ -1,3 +1,4 @@
+import { isNil } from 'lodash'
 import { defineStore } from 'pinia'
 import { download, post } from '../bin/fetch'
 import { now } from '../bin/utils'
@@ -6,12 +7,17 @@ import { useLoading } from './loading'
 
 // TODO: Add interface for folder & file
 
+// create default state for volume
+if (isNil(localStorage.getItem('volume')))
+  localStorage.setItem('volume', '30')
+
 interface State {
   audioState: {
     playing: boolean
     path: string
     startedAt: number
     pausedAt: number
+    volume: number
   }
   audio: HTMLAudioElement
   registry: Map<string, string>
@@ -25,7 +31,7 @@ export const useFile = defineStore('file', {
       path: '',
       startedAt: 0,
       pausedAt: 0,
-
+      volume: Number(localStorage.getItem('volume')),
     },
     audio: document.createElement('audio'),
     registry: new Map(),
@@ -73,9 +79,15 @@ export const useFile = defineStore('file', {
       const registeredPath = this.registry.get(path)
 
       if (registeredPath) {
+        if (path === this.audioState.path) {
+          this.toggle()
+          return
+        }
+
+        /* Init */
         this.audio.src = registeredPath
         this.audioState.path = path
-        this.toggle()
+        this.play()
       }
     },
 
@@ -90,10 +102,18 @@ export const useFile = defineStore('file', {
         this.play()
     },
 
+    setVolume(volume: number) {
+      this.audioState.volume = volume
+      this.audio.volume = volume / 100
+      localStorage.setItem('volume', volume.toString())
+    },
+
     play() {
-      this.audio.play()
+      this.setVolume(this.audioState.volume)
       this.audioState.playing = true
       this.audioState.startedAt = now()
+      this.audioState.pausedAt = 0
+      this.audio.play()
     },
 
     unpause() {
