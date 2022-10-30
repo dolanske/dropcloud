@@ -1,0 +1,120 @@
+.player {
+  position: fixed;
+  left: 0;
+  bottom: 25px;
+  width: 100%;
+
+  .container {
+    padding: 0;
+  }
+
+  .player-box {
+    @include radius(5px);
+    @include grid(0, 1fr 388px 1fr);
+    align-items: center;
+    background-color: var(--color-black);
+    height: 44px;
+    line-height: 44px;
+    padding: 0 5px;
+    box-shadow: 1px 3px 10px rgba(#1c1b18, 0.3);
+
+    .player-control {
+      @include flex(5px, flex-start, center);
+
+      button {
+        @include flex(0, center, center);
+        width: 35px;
+        height: 35px;
+        border: none;
+        background-color: transparent;
+        position: relative;
+        z-index: 5;
+
+        &:after {
+          @include t(0.1s);
+          content: "";
+          position: absolute;
+          right: 0;
+          left: 0;
+          bottom: 0;
+          height: 0;
+          background-color: var(--color-black-light);
+          opacity: 0;
+          z-index: -1;
+        }
+
+        &:hover:after {
+          opacity: 1;
+          height: 100%;
+        }
+
+        span {
+          z-index: 5;
+          font-size: 2rem;
+          color: var(--dark-color-text);
+        }
+      }
+    }
+
+    .player-bar-wrap {
+      @include flex(20px, center, center);
+
+      span {
+        @include font(400);
+        font-size: 1.2rem;
+        width: 40px;
+        text-align: center;
+        color: var(--dark-color-text);
+      }
+
+      .player-bar-background {
+        flex: 1;
+        height: 6px;
+        position: relative;
+        background-color: var(--color-bg-shade);
+
+        .player-bar-progress {
+          position: absolute;
+          inset: 0;
+          right: unset;
+          height: 6px;
+          background-color: var(--color-primary);
+        }
+
+        .player-bar-btn {
+          @include t();
+          @include radius(50%);
+          display: block;
+          position: absolute;
+          top: 50%;
+          transform: translate(-50%, -50%);
+          width: 18px;
+          height: 18px;
+          background-color: var(--color-primary);
+        }
+      }
+    }
+
+    .player-file {
+      position: relative;
+      height: 35px;
+
+      p {
+        display: block;
+        position: absolute;
+        inset: 0;
+        left: 40px;
+        right: 15px;
+        height: 35px;
+        line-height: 35px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        color: var(--dark-color-text-light);
+        font-size: 1.2rem;
+        text-align: right;
+      }
+    }
+  }
+}

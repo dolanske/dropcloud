@@ -1,0 +1,197 @@
+.route-folder {
+  min-height: 100vh;
+  padding: 40px 0 84px;
+
+  .route-header {
+    padding-top: 40px;
+  }
+
+  .route-content {
+    .wrapper {
+      @include grid(20px, 292px 1fr);
+      // align-items: start;
+    }
+
+    .sidebar-wrapper {
+      position: relative;
+      height: 100%;
+
+      aside {
+        @include radius(5px);
+        background-color: var(--color-bg-light);
+        padding: 20px 15px;
+        position: sticky;
+        top: 20px;
+
+        h4 {
+          margin-bottom: 20px;
+        }
+
+        .folder-structure {
+          li {
+            width: 100%;
+            margin-bottom: 4px;
+
+            & > ul {
+              padding-left: 12px;
+            }
+
+            &.is-active {
+              button {
+                &:after {
+                  opacity: 1;
+                  height: 100%;
+                }
+
+                .material-icons {
+                  color: var(--color-primary);
+                }
+              }
+
+              & + li ul {
+                // border-left: 1px solid var(--color-primary);
+                // position: relative;
+
+                // &:before {
+                //   content: "";
+                //   position: absolute;
+                //   left: 15px;
+                //   top: 4px;
+                //   bottom: 16px;
+                //   border-left: 1px solid var(--color-border);
+                // }
+
+                // & > li:not(.folder-li) {
+                //   position: relative;
+
+                //   &:before {
+                //     content: "";
+                //     position: absolute;
+                //     left: 3px;
+                //     bottom: 50%;
+                //     width: 6px;
+                //     border-bottom: 1px solid var(--color-border);
+                //   }
+                // }
+              }
+            }
+
+            button {
+              @include flex(10px, flex-start, center);
+              @include font(400);
+              // height: 30px;
+              width: 100%;
+              text-align: left;
+
+              // line-height: 30px;
+              padding: 5px 10px;
+              position: relative;
+              color: var(--color-text);
+
+              .material-icons {
+                color: var(--color-text-light);
+              }
+
+              &:after {
+                @include radius(5px);
+                @include t(0.1s);
+                content: "";
+                position: absolute;
+                right: 0;
+                left: 0;
+                bottom: 0;
+                height: 0;
+                background-color: var(--color-bg);
+                opacity: 0;
+                z-index: -1;
+              }
+
+              &:hover:after {
+                opacity: 1;
+                height: 100%;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .table-wrapper {
+      table {
+        width: 100%;
+        table-layout: fixed;
+        border-collapse: collapse;
+
+        thead tr th {
+          @include font(400);
+          text-align: left;
+          font-size: 1.2rem;
+          text-transform: uppercase;
+          color: var(--color-text-light);
+          padding-bottom: 10px;
+          padding-top: 10px;
+          position: sticky;
+          top: 0;
+          background-color: var(--color-white);
+
+          &:first-child {
+            width: 50px;
+          }
+
+          &:nth-child(2) {
+            width: 90%;
+          }
+
+          &:nth-child(3) {
+            width: 30%;
+          }
+
+          &:nth-child(4) {
+            width: 30%;
+          }
+        }
+
+        tbody tr {
+          cursor: pointer;
+
+          &:hover {
+            td {
+              background-color: var(--color-bg-light);
+
+              &.is-file {
+                .material-icons {
+                  opacity: 1;
+                }
+              }
+            }
+          }
+
+          td {
+            @include t();
+            padding: 10px 0;
+            vertical-align: middle;
+
+            &:hover {
+              &.is-file .material-icons {
+                color: var(--color-primary);
+              }
+            }
+
+            &.is-file {
+              .material-icons {
+                @include t();
+                opacity: 0;
+              }
+            }
+
+            &:first-of-type {
+              padding-left: 10px;
+              width: 40px;
+              // text-align: center;
+            }
+          }
+        }
+      }
+    }
+  }
+}

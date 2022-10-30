@@ -1,0 +1,27 @@
+:root {
+  // New shit
+  --color-white: #fffdf9;
+  --color-black: #1c1b18;
+  --color-black-light: #312f2a;
+
+  --color-text: #2a2821;
+  --color-text-light: #a39e94;
+
+  --dark-color-text: #f5edd8;
+  --dark-color-text-light: #767167;
+
+  --color-bg: #eae6dc;
+  --color-bg-light: #f4f1e7;
+  --color-bg-shade: #d9d6cc;
+  --color-bg-dark: #c5c0b2;
+  --color-border: #cecbc0;
+
+  --color-primary-shade: #9b0054;
+  --color-primary: #fc1d64;
+  --color-primary-light: #ff92b3;
+  --color-primary-lighter: #ffe5ed;
+}
+
+:root.dark-theme {
+  // Dark theme variable versions
+}

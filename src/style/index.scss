@@ -1,0 +1,34 @@
+@import "./setup/";
+
+@import "./generic/";
+
+html {
+  @include font(400);
+  font-size: 63.5%;
+  position: relative;
+  background-color: var(--color-white);
+  color: var(--color-text);
+  min-height: 100vh;
+
+  // padding-bottom: 84px;
+  // padding-top: 80px;
+
+  * {
+    // outline: none !important;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-size: 1.4rem;
+  }
+
+  // a {
+  //   text-decoration: none;
+  // }
+}
+
+@import "./app/";
+
+@import "./overrides/";
