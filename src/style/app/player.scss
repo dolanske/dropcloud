@@ -27,6 +27,7 @@
         z-index: 5;
 
         &:after {
+          @include radius(5px);
           @include t(0.1s);
           content: "";
           position: absolute;
