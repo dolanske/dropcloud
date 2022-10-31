@@ -1,5 +1,5 @@
 <script setup lang='ts'>
-import { computed, reactive, ref, watch } from 'vue'
+import { computed, reactive, ref, watch, watchEffect } from 'vue'
 import { onClickOutside } from '@vueuse/core'
 import { useFile } from '../store/file'
 import { getFormattedlength, now } from '../bin/utils'
@@ -11,33 +11,23 @@ const file = useFile()
 // Get relevant files
 const metadata = computed(() => file.getFileData(file.audioState.path))
 const audio = computed(() => file.audio)
-
-// Update audio timestamps and progress bar
-const timestamp = reactive({
-  elapsed: 0,
-  duration: 0,
+const progress = computed(() => {
+  return (file.audioState.elapsed / file.audio.duration) * 100
 })
 
-// Reset timestamps when file changes
-watch(() => file.audioState.path, () => {
-  Object.assign(timestamp, { elapse: 0, duration: 0 })
-})
+// watchEffect(() => {
+//   console.log(progress.value)
+// })
 
 audio.value.addEventListener('timeupdate', (e: any) => {
   if (!file.audioState.playing)
     return
 
-  if (!timestamp.duration)
-    timestamp.duration = e.target.duration
-
-  // FIXME: sometimes song ends at eg 35 while the length is 34 (goofy ass)
-  timestamp.elapsed = (now() - file.audioState.startedAt) / 1000
+  file.audioState.elapsed = (now() - file.audioState.startedAt) / 1000
 })
 
-const percentage = computed(() => (timestamp.elapsed / timestamp.duration) * 100)
-
+/* ---------------- // SECTION // ---------------- */
 // Volume
-
 const volumeInput = ref()
 const volumeOpen = ref(false)
 const volume = computed({
@@ -48,6 +38,54 @@ const volume = computed({
 onClickOutside(volumeInput, () => {
   volumeOpen.value = false
 })
+
+/* ---------------- // SECTION // ---------------- */
+// Progress
+const playerbar = ref()
+// const holding = ref(false)
+
+function setProgress(e: MouseEvent) {
+  const target = e.target as HTMLElement
+  if (target) {
+    const { left, width } = target.getBoundingClientRect()
+
+    const posOnEl = ((left + window.scrollX) - e.clientX) * -1
+    const percent = (posOnEl / width) * 100
+
+    file.setProgress(percent)
+  }
+}
+
+// const tooltipPos = ref(0)
+const tooltip = reactive({
+  left: 0,
+  show: false,
+  time: '0:00',
+})
+
+function handleEnter() {
+  tooltip.show = true
+}
+
+function handleLeave() {
+  tooltip.show = false
+}
+
+function handleMove(e: MouseEvent) {
+  if (tooltip.show && file.audioState.path) {
+    // const target = e.target as HTMLElement
+
+    // console.log(target)
+
+    if (playerbar.value) {
+      const { left, width } = playerbar.value.getBoundingClientRect()
+
+      const posOnEl = ((left + window.scrollX) - e.clientX) * -1
+      tooltip.left = (posOnEl / width) * 100
+      tooltip.time = getFormattedlength((file.audio.duration / 100) * tooltip.left)
+    }
+  }
+}
 </script>
 
 <template>
@@ -87,7 +125,7 @@ onClickOutside(volumeInput, () => {
             <button data-title-top="Volume" @click="volumeOpen = !volumeOpen">
               <Icon :code="volume > 0 ? 'e050' : 'e04e'" />
             </button>
-            <div v-if="volumeOpen" class="input-slider-wrap">
+            <div v-if="volumeOpen" class="input-slider-wrap has-arrow">
               <span>{{ volume }}%</span>
 
               <InputSlider v-model:value="volume" />
@@ -98,14 +136,33 @@ onClickOutside(volumeInput, () => {
         </div>
 
         <div class="player-bar-wrap">
-          <span>{{ getFormattedlength(timestamp.elapsed) }}</span>
+          <span>{{ getFormattedlength(file.audioState.elapsed) }}</span>
 
-          <div class="player-bar-background">
-            <div class="player-bar-progress" :style="{ width: `${percentage}%` }" />
-            <button class="player-bar-btn" :style="{ left: `${percentage}%` }" />
+          <div
+            ref="playerbar"
+            class="player-bar-background"
+            @click="setProgress($event)"
+            @mouseenter="handleEnter"
+            @mouseleave="handleLeave"
+            @mousemove="handleMove($event)"
+          >
+            <div
+              v-if="tooltip.show && file.audioState.path"
+              class="player-bar-tooltip has-arrow"
+              :style="{ left: `${tooltip.left}%` }"
+            >
+              {{ tooltip.time }}
+            </div>
+
+            <div class="player-bar-progress" :style="{ width: `${progress}%` }" />
+
+            <button
+              class="player-bar-btn"
+              :style="{ left: `${progress}%` }"
+            />
           </div>
 
-          <span>{{ getFormattedlength(timestamp.duration) }}</span>
+          <span>{{ getFormattedlength(file.audio.duration) }}</span>
         </div>
 
         <div class="player-file">

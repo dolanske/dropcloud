@@ -5,9 +5,7 @@ import { now } from '../bin/utils'
 import type { DbxFile } from '../types/dropbox-types'
 import { useLoading } from './loading'
 
-// TODO: Add interface for folder & file
-
-// create default state for volume
+// create default state for volume, run once when app is initialized
 if (isNil(localStorage.getItem('volume')))
   localStorage.setItem('volume', '30')
 
@@ -18,6 +16,7 @@ interface State {
     startedAt: number
     pausedAt: number
     volume: number
+    elapsed: number
   }
   audio: HTMLAudioElement
   registry: Map<string, string>
@@ -32,6 +31,7 @@ export const useFile = defineStore('file', {
       startedAt: 0,
       pausedAt: 0,
       volume: Number(localStorage.getItem('volume')),
+      elapsed: 0,
     },
     audio: document.createElement('audio'),
     registry: new Map(),
@@ -87,6 +87,7 @@ export const useFile = defineStore('file', {
         /* Init */
         this.audio.src = registeredPath
         this.audioState.path = path
+        this.audioState.elapsed = 0
         this.play()
       }
     },
@@ -127,6 +128,14 @@ export const useFile = defineStore('file', {
       this.audio.pause()
       this.audioState.playing = false
       this.audioState.pausedAt = now() - this.audioState.startedAt
+    },
+
+    setProgress(percent: number) {
+      const updated = (this.audio.duration / 100) * percent
+
+      this.audioState.startedAt = now() - (updated * 1000)
+      this.audioState.elapsed = updated
+      this.audio.currentTime = updated
     },
   },
   getters: {

@@ -1,5 +1,7 @@
 import { isObject, merge } from 'lodash'
+import { APP_KEY, redirect_uri } from '../config'
 
+export const redirectUrl = `https://www.dropbox.com/oauth2/authorize?client_id=${APP_KEY}&redirect_uri=${redirect_uri}&response_type=token`
 export const rootUrl = 'https://_prefix_.dropboxapi.com/2'
 export const token = ''
 
@@ -127,6 +129,10 @@ async function _handleFetch(path: string, options: object, prefix: string) {
 }
 
 async function _handleResponse(response: Response) {
+  // Custom authentication redirect
+  if (response.status === 401)
+    window.location.href = redirectUrl
+
   if (response.status !== 200) {
     return response.text().then((text: string) => {
       let message = null

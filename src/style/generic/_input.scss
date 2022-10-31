@@ -52,8 +52,15 @@
 
   span {
     color: var(--dark-color-text-light);
+    font-size: 1.4rem;
   }
+}
 
+.input-volume {
+  position: relative;
+}
+
+.has-arrow {
   &:before {
     content: "";
     display: block;
@@ -67,8 +74,4 @@
 
     border-top: 5px solid var(--color-black);
   }
-}
-
-.input-volume {
-  position: relative;
 }

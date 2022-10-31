@@ -69,6 +69,26 @@
         position: relative;
         background-color: var(--color-bg-shade);
 
+        &:before {
+          content: "";
+          display: block;
+          position: absolute;
+          inset: -5px 0;
+          z-index: -1;
+        }
+
+        .player-bar-tooltip {
+          font-size: 1.4rem;
+          height: 40px;
+          position: absolute;
+          bottom: calc(100% + 33px);
+          left: 0;
+          padding: 0 10px;
+          background-color: var(--color-black);
+          color: var(--dark-color-text);
+          transform: translateX(-50%);
+        }
+
         .player-bar-progress {
           position: absolute;
           inset: 0;
