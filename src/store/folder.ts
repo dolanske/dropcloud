@@ -39,7 +39,7 @@ export const useFolder = defineStore('folder', {
       })
     },
     getItemAmountInPath: state => (path: string) => {
-      return state.everything.filter(folder => !folder.path_lower.startsWith(path)).length
+      return state.everything.filter(folder => folder.path_lower.startsWith(path) && folder['.tag'] === 'file').length
     },
   },
 })

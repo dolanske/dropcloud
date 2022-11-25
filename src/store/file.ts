@@ -50,6 +50,7 @@ export const useFile = defineStore('file', {
     },
 
     async dwFile(path: string) {
+      // TODO: fix caching registry
       const loading = useLoading()
 
       // Do not download cached files
@@ -128,6 +129,14 @@ export const useFile = defineStore('file', {
       this.audio.pause()
       this.audioState.playing = false
       this.audioState.pausedAt = now() - this.audioState.startedAt
+    },
+
+    reset() {
+      this.audioState.playing = false
+      this.audioState.startedAt = 0
+      this.audioState.pausedAt = 0
+      this.audioState.elapsed = 0
+      this.audio.currentTime = 0
     },
 
     setProgress(percent: number) {

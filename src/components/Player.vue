@@ -15,15 +15,17 @@ const progress = computed(() => {
   return (file.audioState.elapsed / file.audio.duration) * 100
 })
 
-// watchEffect(() => {
-//   console.log(progress.value)
-// })
-
+/* ---------------- // SECTION // ---------------- */
+// Audio events
 audio.value.addEventListener('timeupdate', (e: any) => {
   if (!file.audioState.playing)
     return
 
   file.audioState.elapsed = (now() - file.audioState.startedAt) / 1000
+})
+
+audio.value.addEventListener('ended', () => {
+  file.reset()
 })
 
 /* ---------------- // SECTION // ---------------- */
@@ -45,13 +47,12 @@ const playerbar = ref()
 // const holding = ref(false)
 
 function setProgress(e: MouseEvent) {
-  const target = e.target as HTMLElement
+  const target = playerbar.value
   if (target) {
     const { left, width } = target.getBoundingClientRect()
 
     const posOnEl = ((left + window.scrollX) - e.clientX) * -1
-    const percent = (posOnEl / width) * 100
-
+    const percent = Math.min((100 * posOnEl) / width, 100)
     file.setProgress(percent)
   }
 }
@@ -73,15 +74,11 @@ function handleLeave() {
 
 function handleMove(e: MouseEvent) {
   if (tooltip.show && file.audioState.path) {
-    // const target = e.target as HTMLElement
-
-    // console.log(target)
-
     if (playerbar.value) {
       const { left, width } = playerbar.value.getBoundingClientRect()
 
       const posOnEl = ((left + window.scrollX) - e.clientX) * -1
-      tooltip.left = (posOnEl / width) * 100
+      tooltip.left = Math.min((100 * posOnEl) / width, 100)
       tooltip.time = getFormattedlength((file.audio.duration / 100) * tooltip.left)
     }
   }
@@ -136,7 +133,7 @@ function handleMove(e: MouseEvent) {
         </div>
 
         <div class="player-bar-wrap">
-          <span>{{ getFormattedlength(file.audioState.elapsed) }}</span>
+          <span>{{ getFormattedlength(Math.min(file.audioState.elapsed, file.audio.duration)) }}</span>
 
           <div
             ref="playerbar"
@@ -156,10 +153,10 @@ function handleMove(e: MouseEvent) {
 
             <div class="player-bar-progress" :style="{ width: `${progress}%` }" />
 
-            <button
+            <!-- <button
               class="player-bar-btn"
               :style="{ left: `${progress}%` }"
-            />
+            /> -->
           </div>
 
           <span>{{ getFormattedlength(file.audio.duration) }}</span>

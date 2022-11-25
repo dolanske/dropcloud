@@ -64,9 +64,11 @@
         color: var(--dark-color-text);
       }
 
+      --bar-height: 8px;
+
       .player-bar-background {
         flex: 1;
-        height: 6px;
+        height: var(--bar-height);
         position: relative;
         background-color: var(--color-bg-shade);
 
@@ -94,8 +96,9 @@
           position: absolute;
           inset: 0;
           right: unset;
-          height: 6px;
+          height: var(--bar-height);
           background-color: var(--color-primary);
+          max-width: 100% !important;
         }
 
         .player-bar-btn {
@@ -108,6 +111,8 @@
           width: 18px;
           height: 18px;
           background-color: var(--color-primary);
+
+          pointer-events: none;
         }
       }
     }
