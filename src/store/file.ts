@@ -3,6 +3,7 @@ import { defineStore } from 'pinia'
 import { download, post } from '../bin/fetch'
 import { now } from '../bin/utils'
 import type { DbxFile } from '../types/dropbox-types'
+import { useTracklist } from './tracklist'
 import { useLoading } from './loading'
 
 let setProgressDuringPause = false
@@ -51,7 +52,7 @@ export const useFile = defineStore('file', {
     },
 
     async dwFile(path: string) {
-      // TODO: fix caching registry
+      // TODO: test and/or fix caching registry
       const loading = useLoading()
 
       // Do not download cached files
@@ -117,6 +118,9 @@ export const useFile = defineStore('file', {
       this.audioState.startedAt = now()
       this.audioState.pausedAt = 0
       this.audio.play()
+
+      const tracklist = useTracklist()
+      tracklist.pushHistory(this.audioState.path)
     },
 
     unpause() {

@@ -1,12 +1,14 @@
 <script setup lang='ts'>
 import { useDateFormat } from '@vueuse/shared'
 import { computed, ref } from 'vue'
+import { track } from '@vue/reactivity'
 import { formatFileSize } from '../bin/utils'
 import { useFile } from '../store/file'
 import { useFolder } from '../store/folder'
 import { useLoading } from '../store/loading'
 import type { DbxFile, DbxFolder } from '../types/dropbox-types'
 
+import { useTracklist } from '../store/tracklist'
 import Spinner from './global/Spinner.vue'
 import Eq from './global/Eq.vue'
 
@@ -17,6 +19,7 @@ const props = defineProps<{
 const loading = useLoading()
 const files = useFile()
 const folder = useFolder()
+const tracklist = useTracklist()
 const date = props.file['.tag'] === 'file' ? useDateFormat(props.file?.client_modified, 'DD/MM YYYY') : ''
 
 //
@@ -30,6 +33,7 @@ const size = computed(() => {
 async function updateAudioState() {
   await files.dwFile(props.file.id)
   files.updateAudioState(props.file.id)
+  tracklist.$patch({ current: 0 })
 }
 
 function goToFile() {

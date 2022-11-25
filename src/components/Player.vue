@@ -2,10 +2,12 @@
 import { computed, reactive, ref, watch, watchEffect } from 'vue'
 import { onClickOutside } from '@vueuse/core'
 import { useFile } from '../store/file'
+import { useTracklist } from '../store/tracklist'
 import { getFormattedlength, now } from '../bin/utils'
 
 import InputSlider from '../components/inputs/InputSlider.vue'
 
+const tracklist = useTracklist()
 const file = useFile()
 
 // Get relevant files
@@ -83,6 +85,21 @@ function handleMove(e: MouseEvent) {
     }
   }
 }
+
+/* ---------------- // SECTION // ---------------- */
+// Previous song
+
+async function previous() {
+  const track = tracklist.getPrevInHistory()
+
+  if (!track)
+    return
+
+  console.log(track)
+
+  await file.dwFile(track)
+  file.updateAudioState(track)
+}
 </script>
 
 <template>
@@ -92,7 +109,7 @@ function handleMove(e: MouseEvent) {
         <div class="player-control">
           <!-- previous-file -->
 
-          <button data-title-top="Previous">
+          <button data-title-top="Previous" @click="previous()">
             <Icon code="e045" />
           </button>
 

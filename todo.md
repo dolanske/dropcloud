@@ -1,10 +1,11 @@
-# Todo
+# Notes & Todo
 
 ## Design
 
 - [Palette] [] Pick a new accent color
 - [Palette] [] Mockup a quick dark-mode
 - [Palette] [] Update neutral colors, possibly move away from tinted ones to grayscale?
+- [Loading] [] Add a global loading indicator. top of the page?
 
 ## Components
 
@@ -28,15 +29,15 @@
 
 --------------
 
-## Day plan
+## Tasks #1 (25/11/2022)
 
 - [x] Automatically pause when song finishes
 - [x] Fix skipping backwards in player
 - [x] Fix possibility of progress bar extending beyond 100%
 - [x] Fix folder file count
-- [] If progress is updated while paused, it ignores it and resumes where it ended
+- [x] If progress is updated while paused, it ignores it and resumes where it ended
 
-## Tasks #2
+## Tasks #2 (25/11/2022)
 
 - [] Create a history registry
 - [] Cache downloaded files

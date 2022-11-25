@@ -1,9 +1,13 @@
-import { isObject, merge } from 'lodash'
+import { isEmpty, isNil, isObject, merge } from 'lodash'
 import { APP_KEY, redirect_uri } from '../config'
 
 export const redirectUrl = `https://www.dropbox.com/oauth2/authorize?client_id=${APP_KEY}&redirect_uri=${redirect_uri}&response_type=token`
 export const rootUrl = 'https://_prefix_.dropboxapi.com/2'
 export const token = ''
+
+function redirectToSignIn() {
+  window.location.href = redirectUrl
+}
 
 const prefixes = ['api', 'content']
 
@@ -114,7 +118,10 @@ export function download(path: string, options?: object) {
 
 // Private handler functions
 async function _handleFetch(path: string, options: object, prefix: string) {
-  const token = JSON.parse(localStorage.getItem('dbx-context') ?? '')
+  const token = JSON.parse(localStorage.getItem('dbx-context') ?? '{}')
+
+  if (isNil(token) || isEmpty(token))
+    redirectToSignIn()
 
   const mergedRootUrl = rootUrl.replace('_prefix_', prefix)
 
@@ -131,7 +138,7 @@ async function _handleFetch(path: string, options: object, prefix: string) {
 async function _handleResponse(response: Response) {
   // Custom authentication redirect
   if (response.status === 401)
-    window.location.href = redirectUrl
+    redirectToSignIn()
 
   if (response.status !== 200) {
     return response.text().then((text: string) => {

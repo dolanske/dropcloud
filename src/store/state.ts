@@ -12,7 +12,7 @@ export interface AuthObject {
 }
 
 interface State {
-  token: string
+  token?: string
   auth: AuthObject
 }
 
@@ -20,7 +20,7 @@ interface State {
 
 export const useState = defineStore('state', {
   state: () => ({
-    token: '',
+    token: undefined,
     auth: {},
   } as State),
   actions: {
