@@ -93,6 +93,7 @@
         }
 
         .player-bar-progress {
+          @include t();
           position: absolute;
           inset: 0;
           right: unset;

@@ -5,6 +5,8 @@ import { now } from '../bin/utils'
 import type { DbxFile } from '../types/dropbox-types'
 import { useLoading } from './loading'
 
+let setProgressDuringPause = false
+
 // create default state for volume, run once when app is initialized
 if (isNil(localStorage.getItem('volume')))
   localStorage.setItem('volume', '30')
@@ -36,7 +38,6 @@ export const useFile = defineStore('file', {
     audio: document.createElement('audio'),
     registry: new Map(),
     files: [],
-
   } as State),
   actions: {
     async fetchFilesFromPath(path: string) {
@@ -121,6 +122,17 @@ export const useFile = defineStore('file', {
     unpause() {
       this.audio.play()
       this.audioState.playing = true
+
+      if (setProgressDuringPause) {
+        /**
+         * This is needed becaue on unpause it calculates the progress based on when pause occured.
+         * If progress was updated during pause, the timings are messed up. We can easily fix it but just
+         * skipping the new assignment. As we know it had happened during the pause
+         */
+        setProgressDuringPause = false
+        return
+      }
+
       this.audio.currentTime = this.audioState.pausedAt / 1000
       this.audioState.startedAt = now() - this.audioState.pausedAt
     },
@@ -141,10 +153,12 @@ export const useFile = defineStore('file', {
 
     setProgress(percent: number) {
       const updated = (this.audio.duration / 100) * percent
-
       this.audioState.startedAt = now() - (updated * 1000)
       this.audioState.elapsed = updated
       this.audio.currentTime = updated
+
+      if (!this.audioState.playing)
+        setProgressDuringPause = true
     },
   },
   getters: {

@@ -24,14 +24,24 @@
   - [] Add animated icon in the table
   - [] Add animated icon to the file list?
 
-- [Detail] [] 
-
+- [Detail] []  a
 
 --------------
 
-# Day plan
+## Day plan
 
 - [x] Automatically pause when song finishes
 - [x] Fix skipping backwards in player
 - [x] Fix possibility of progress bar extending beyond 100%
 - [x] Fix folder file count
+- [] If progress is updated while paused, it ignores it and resumes where it ended
+
+## Tasks #2
+
+- [] Create a history registry
+- [] Cache downloaded files
+- [] Add shuffle (should not play the same file if its within the last X songs)
+- [] Implement previous and next file
+  - (previous just goes back -1 in hist)
+  - next goes (random if on shuffle) or (next one in queue) or (next logical one in list)
+- [] Create queue
