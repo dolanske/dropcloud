@@ -32,6 +32,6 @@
 # Day plan
 
 - [x] Automatically pause when song finishes
-- [] Fix skipping backwards in player
+- [x] Fix skipping backwards in player
 - [x] Fix possibility of progress bar extending beyond 100%
 - [x] Fix folder file count
