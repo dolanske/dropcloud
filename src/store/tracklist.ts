@@ -28,7 +28,7 @@ export const useTracklist = defineStore('tracklist', {
     pushHistory(id: string) {
       // If id is in history -> remove it so that it gets appended again
       if (this.history.includes(id))
-        this.history = this.history.filter(track => track === id)
+        this.history = this.history.filter(track => track !== id)
 
       this.history.unshift(id)
 

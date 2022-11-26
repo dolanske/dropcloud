@@ -47,7 +47,7 @@ export const useFile = defineStore('file', {
 
       await post('/files/list_folder', { path })
         .then((response) => {
-          this.files = response.entries
+          this.files = response.entries.filter((item: DbxFile) => !item.name.startsWith('._'))
         })
     },
 
@@ -155,6 +155,10 @@ export const useFile = defineStore('file', {
       this.audio.currentTime = 0
     },
 
+    /**
+     *  Change song's playback position to the amount of %.
+     */
+
     setProgress(percent: number) {
       const updated = (this.audio.duration / 100) * percent
       this.audioState.startedAt = now() - (updated * 1000)
@@ -164,6 +168,14 @@ export const useFile = defineStore('file', {
       if (!this.audioState.playing)
         setProgressDuringPause = true
     },
+
+    /**
+     * Change the current song's position by the provided amount of seconds.
+     * The input can be negative.
+     */
+    // changeTime(by: number) {
+    //   const newElapsed = this.audioState.elapsed + by
+    // },
   },
   getters: {
     getFileData: state => (path: string) => state.files.find((file: any) => file?.id === path),

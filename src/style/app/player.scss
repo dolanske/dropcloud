@@ -26,6 +26,12 @@
         position: relative;
         z-index: 5;
 
+        &.blue.is-active {
+          &:after {
+            background-color: var(--color-primary-shade);
+          }
+        }
+
         &:after {
           @include radius(5px);
           @include t(0.1s);
@@ -40,6 +46,7 @@
           z-index: -1;
         }
 
+        &.is-active:after,
         &:hover:after {
           opacity: 1;
           height: 100%;
@@ -67,10 +74,16 @@
       --bar-height: 8px;
 
       .player-bar-background {
+        @include t();
+
         flex: 1;
         height: var(--bar-height);
         position: relative;
         background-color: var(--color-bg-shade);
+
+        &:hover {
+          --bar-height: 12px;
+        }
 
         &:before {
           content: "";
@@ -112,7 +125,6 @@
           width: 18px;
           height: 18px;
           background-color: var(--color-primary);
-
           pointer-events: none;
         }
       }

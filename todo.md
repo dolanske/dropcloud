@@ -40,9 +40,11 @@
 ## Tasks #2 (25/11/2022)
 
 - [] Create a history registry
+
 - [] Cache downloaded files
 - [] Add shuffle (should not play the same file if its within the last X songs)
 - [] Implement previous and next file
   - (previous just goes back -1 in hist)
   - next goes (random if on shuffle) or (next one in queue) or (next logical one in list)
 - [] Create queue
+- [] Implement repeating of the currently active song

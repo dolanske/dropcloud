@@ -95,11 +95,13 @@ async function previous() {
   if (!track)
     return
 
-  console.log(track)
-
   await file.dwFile(track)
   file.updateAudioState(track)
 }
+
+/* ---------------- // SECTION // ---------------- */
+// Repeat
+const repeat = ref(false)
 </script>
 
 <template>
@@ -131,6 +133,12 @@ async function previous() {
 
           <button data-title-top="Shuffle">
             <Icon code="e043" />
+          </button>
+
+          <!-- repeat -->
+
+          <button class="blue" data-title-top="Repeat" :class="{ 'is-active': repeat }" @click="repeat = !repeat">
+            <Icon code="e041" />
           </button>
 
           <!-- volume-changing -->
