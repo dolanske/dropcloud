@@ -1,9 +1,11 @@
 <script setup lang='ts'>
-// Search through the entire file-set
+/**
+ * Browse history & create tracklist
+ */
 </script>
 
 <template>
   <div>
-    sreach
+    tracklist
   </div>
 </template>

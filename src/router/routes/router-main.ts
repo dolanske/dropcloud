@@ -1,5 +1,7 @@
 import RouteFolder from '../views/RouteFolder.vue'
-import RouteFile from '../views/RouteFile.vue'
+import RoutePlayer from '../views/RoutePlayer.vue'
+import RouteSearch from '../views/RouteSearch.vue'
+import RouteTracklist from '../views/RouteTracklist.vue'
 
 export default [
   {
@@ -15,8 +17,18 @@ export default [
     },
   },
   {
-    path: '/folder/file/:id',
-    name: 'RouteFile',
-    component: RouteFile,
+    path: '/player/:id?',
+    name: 'RoutePlayer',
+    component: RoutePlayer,
+  },
+  {
+    path: '/search',
+    name: 'RouteSearch',
+    component: RouteSearch,
+  },
+  {
+    path: '/tracklist',
+    name: 'RouteTracklist',
+    component: RouteTracklist,
   },
 ]

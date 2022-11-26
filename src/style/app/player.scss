@@ -4,6 +4,10 @@
   bottom: 25px;
   width: 100%;
 
+  .container {
+    margin: 0 auto;
+  }
+
   .player-box {
     @include radius(5px);
     @include grid(0, 1fr 388px 1fr);

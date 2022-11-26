@@ -7,6 +7,7 @@ import { useState } from './store/state'
 import type { AuthObject } from './store/state'
 import { getUrlHashQuery } from './bin/utils'
 import Player from './components/Player.vue'
+import Navigation from './components/Navigation.vue'
 
 const router = useRouter()
 const state = useState()
@@ -26,6 +27,7 @@ onMounted(() => {
 
 <template>
   <div>
+    <Navigation />
     <router-view />
     <Player />
   </div>

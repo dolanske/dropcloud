@@ -3,10 +3,16 @@
   width: 100%;
   max-width: 1180px;
   padding: 0 20px;
-  margin: 0 auto;
+  // margin: 0 auto;
   // margin-left: 192px;
 
   &.container-player {
     width: 1024px;
+  }
+}
+
+#app {
+  & > div {
+    @include grid(0, 80px 1fr);
   }
 }

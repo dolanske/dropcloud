@@ -7,7 +7,7 @@
 
   .route-content {
     .wrapper {
-      @include grid(0, 316px 1fr);
+      @include grid(0, 384px 1fr);
       min-height: 100vh;
     }
 
@@ -16,7 +16,7 @@
       height: 100%;
       border-right: 1px solid var(--color-border);
       padding: 20px;
-      padding-top: 40px;
+      padding-top: 20px;
       padding-right: 20px;
       background-color: var(--color-bg-light);
 
@@ -28,6 +28,7 @@
         position: absolute;
         right: 100%;
         width: 5000px;
+        z-index: -1;
         background-color: var(--color-bg-light);
       }
 
@@ -38,7 +39,7 @@
         overflow-y: auto;
         overflow-x: hidden;
 
-        h4 {
+        h5 {
           margin-bottom: 20px;
         }
 
@@ -62,7 +63,7 @@
                 }
 
                 .material-icons {
-                  color: var(--color-primary);
+                  color: var(--color-primary) !important;
                 }
               }
             }
@@ -90,7 +91,7 @@
                 left: 0;
                 bottom: 0;
                 height: 0;
-                background-color: var(--color-primary);
+                background-color: var(--color-bg-dark);
                 opacity: 0;
                 z-index: -1;
               }
@@ -102,7 +103,7 @@
                 }
 
                 .material-icons {
-                  color: var(--color-primary);
+                  color: var(--color-text);
                 }
               }
             }
@@ -112,17 +113,18 @@
     }
 
     .table-wrapper {
-      padding-top: 40px;
-      padding-left: 20px;
+      // padding-top: 20px;
+      // padding-left: 20px;
       padding-bottom: 84px;
 
       table {
+        margin-left: 20px;
         width: 100%;
         table-layout: fixed;
         border-collapse: collapse;
 
         thead tr th {
-          @include font(200);
+          @include font(500);
           text-align: left;
           font-size: 1.2rem;
           text-transform: uppercase;

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { onMounted, reactive, ref, watch, watchEffect } from 'vue'
-import { concat, get, isEmpty, isNil, isObject, isObjectLike, set } from 'lodash'
+import { computed, onMounted, reactive, ref, watch, watchEffect } from 'vue'
+import { concat, get, isEmpty, isNil, isObject, isObjectLike, set, sortBy } from 'lodash'
 import { useState } from '../../store/state'
 import { post } from '../../bin/fetch'
 import { useFile } from '../../store/file'
@@ -75,8 +75,17 @@ onMounted(async () => {
 })
 
 watch(() => folder.active, (value) => {
+  // If active folder changes, fetch for the files within
   file.fetchFilesFromPath(value.path_lower || rootPath)
 }, { immediate: true })
+
+// Current folder's files list and sort it alphabetically
+const sortedFiles = computed(() => {
+  if (!file.files)
+    return []
+
+  return sortBy(file.files, [o => o.name])
+})
 </script>
 
 <template>
@@ -86,7 +95,7 @@ watch(() => folder.active, (value) => {
         <div class="wrapper">
           <div class="sidebar-wrapper">
             <aside>
-              <h4>Library</h4>
+              <h5>Library</h5>
 
               <ul class="folder-structure">
                 <FolderItem v-for="(item, key) in folder.folderStructure" :key="key" :label="key" :values="item" />
@@ -94,8 +103,8 @@ watch(() => folder.active, (value) => {
             </aside>
           </div>
           <div class="table-wrapper">
-            <!-- <Breadcrumbs /> -->
-            <table>
+            <Breadcrumbs />
+            <table v-if="sortedFiles.length > 0">
               <thead>
                 <tr>
                   <th />
@@ -105,9 +114,13 @@ watch(() => folder.active, (value) => {
                 </tr>
               </thead>
               <tbody>
-                <FileRow v-for="item in file.files" :key="item.id" :file="item" />
+                <FileRow v-for="item in sortedFiles" :key="item.id" :file="item" />
               </tbody>
             </table>
+            <div v-else class="no-results">
+              <h2>Bruh</h2>
+              <p>This file does not contain any files or sub folders.</p>
+            </div>
           </div>
         </div>
       </div>

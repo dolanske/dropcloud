@@ -45,7 +45,4 @@ export const useTracklist = defineStore('tracklist', {
       }
     },
   },
-  // getters: {
-  //   getCurrentHistory: store => store.history.at(store.current),
-  // },
 })
