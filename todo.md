@@ -25,9 +25,7 @@
   - [] Add animated icon in the table
   - [] Add animated icon to the file list?
 
-- [Detail] []  a
 
-- [Folder] [] Stop using container and spread table to the rest of the view
 
 --------------
 
@@ -51,3 +49,9 @@
 - [] Implement repeating of the currently active song
 
 
+## Tasks #3 
+
+- [Folder] [] Stop using container and spread table to the rest of the view
+  - [] Remove breadcrumbs infinite :before
+  - [] Remove sidebar-navigation infinite :before
+  - [] Add list of all files in current folder to the top right of the page 
