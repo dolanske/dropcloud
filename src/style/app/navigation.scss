@@ -24,19 +24,6 @@
         color: var(--color-text);
         position: relative;
 
-        // &:before {
-        //   @include radius(5px);
-        //   @include t(0.2s);
-        //   content: "";
-        //   position: absolute;
-        //   right: 0;
-        //   left: 0;
-        //   bottom: 0;
-        //   height: 0;
-        //   opacity: 0;
-        //   z-index: -1;
-        // }
-
         &:after {
           background-color: var(--color-bg-shade);
         }

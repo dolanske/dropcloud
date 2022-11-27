@@ -113,18 +113,18 @@
           max-width: 100% !important;
         }
 
-        .player-bar-btn {
-          @include t();
-          @include radius(50%);
-          display: block;
-          position: absolute;
-          top: 50%;
-          transform: translate(-50%, -50%);
-          width: 18px;
-          height: 18px;
-          background-color: var(--color-primary);
-          pointer-events: none;
-        }
+        // .player-bar-btn {
+        //   @include t();
+        //   @include radius(50%);
+        //   display: block;
+        //   position: absolute;
+        //   top: 50%;
+        //   transform: translate(-50%, -50%);
+        //   width: 18px;
+        //   height: 18px;
+        //   background-color: var(--color-primary);
+        //   pointer-events: none;
+        // }
       }
     }
 
@@ -144,9 +144,16 @@
         overflow: hidden;
         text-overflow: ellipsis;
 
-        color: var(--dark-color-text-light);
-        font-size: 1.2rem;
         text-align: right;
+
+        button {
+          color: var(--dark-color-text-light);
+          font-size: 1.2rem;
+
+          &:hover {
+            text-decoration: underline;
+          }
+        }
       }
     }
   }

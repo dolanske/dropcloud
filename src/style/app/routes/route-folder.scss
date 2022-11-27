@@ -1,6 +1,4 @@
 .route-folder {
-  // padding: 40px 0 84px;
-
   .route-header {
     padding-top: 40px;
   }
@@ -44,10 +42,8 @@
         }
 
         .folder-structure {
-          // margin-left: -5px;
           li {
             width: 100%;
-            // margin-bottom: 4px;
 
             & > ul {
               padding-left: 15px;
@@ -55,8 +51,6 @@
 
             &.is-active {
               button {
-                color: var(--color-primary);
-
                 &:after {
                   opacity: 1;
                   height: 100%;
@@ -65,6 +59,12 @@
                 .material-icons {
                   color: var(--color-primary) !important;
                 }
+              }
+            }
+
+            &.is-played {
+              button {
+                color: var(--color-primary);
               }
             }
 
@@ -158,6 +158,15 @@
                 .material-icons {
                   opacity: 1;
                 }
+              }
+            }
+          }
+
+          &.is-active {
+            td {
+              &:nth-child(2) {
+                @include font(500);
+                color: var(--color-primary);
               }
             }
           }

@@ -1,3 +1,6 @@
+const { now } = Date
+export { now }
+
 // Returns any URL search parameters it finds in an object
 export function getUrlQuery(...fields: string[]): Record<string, string | number> {
   const data = new URLSearchParams(window.location.search)
@@ -46,6 +49,7 @@ export function getUrlHashQuery<T>() {
   }, {}) as T
 }
 
+// Return a human readable file size
 export function formatFileSize(bytes: string | number, decimals?: number) {
   if (typeof bytes === 'string')
     bytes = Number(bytes)
@@ -58,13 +62,16 @@ export function formatFileSize(bytes: string | number, decimals?: number) {
   return decimals ? `${(bytes / 1000).toFixed(decimals)}KB` : `${bytes / 1000}KB`
 }
 
-const { now } = Date
-
-export { now }
-
-export const getFormattedlength = (s = 1) => {
+// Returns a formatted length of time in seconds
+// Example: 01:32
+export function getFormattedlength(s = 1) {
   if (isNaN(s))
     return '0:00'
 
   return new Date(s * 1000).toISOString().substring(14, 19)
+}
+
+// Returns a path from a file without its name
+export function formatPathWithoutName(path: string) {
+  return path.split('/').slice(0, -1).join('/')
 }

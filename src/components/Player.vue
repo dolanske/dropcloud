@@ -3,19 +3,26 @@ import { computed, reactive, ref, watch, watchEffect } from 'vue'
 import { onClickOutside } from '@vueuse/core'
 import { useFile } from '../store/file'
 import { useTracklist } from '../store/tracklist'
-import { getFormattedlength, now } from '../bin/utils'
+import { formatPathWithoutName, getFormattedlength, now } from '../bin/utils'
 
 import InputSlider from '../components/inputs/InputSlider.vue'
+import { useFolder } from '../store/folder'
 
 const tracklist = useTracklist()
 const file = useFile()
+const folder = useFolder()
 
 // Get relevant files
-const metadata = computed(() => file.getFileData(file.audioState.path))
+const metadata = computed(() => file.audioState.file)
 const audio = computed(() => file.audio)
 const progress = computed(() => {
   return (file.audioState.elapsed / file.audio.duration) * 100
 })
+
+function openAudioFolder() {
+  if (metadata.value)
+    folder.open(formatPathWithoutName(metadata.value.path_lower))
+}
 
 /* ---------------- // SECTION // ---------------- */
 // Audio events
@@ -177,11 +184,6 @@ const repeat = ref(false)
             </div>
 
             <div class="player-bar-progress" :style="{ width: `${progress}%` }" />
-
-            <!-- <button
-              class="player-bar-btn"
-              :style="{ left: `${progress}%` }"
-            /> -->
           </div>
 
           <span>{{ getFormattedlength(file.audio.duration) }}</span>
@@ -189,7 +191,9 @@ const repeat = ref(false)
 
         <div class="player-file">
           <p v-if="metadata">
-            {{ metadata.name }}
+            <button @click="openAudioFolder">
+              {{ metadata.name }}
+            </button>
           </p>
         </div>
       </div>

@@ -3,7 +3,6 @@
 @import "./generic/";
 
 html {
-  @include font(400);
   font-size: 63.5%;
   position: relative;
   background-color: var(--color-white);
@@ -14,8 +13,6 @@ html {
   // padding-top: 80px;
 
   * {
-    @include font(400);
-
     // outline: none !important;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -23,6 +20,7 @@ html {
   }
 
   body {
+    @include font(400);
     font-size: 1.4rem;
     overflow-x: hidden;
   }

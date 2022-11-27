@@ -22,8 +22,8 @@
 - [Breadcrumbs] []  Implement breadcrumbs
 
 - [List] []  Add proper highlight of which song is being played right now (possibly highlight in the folder structure too?)
-  - [] Add animated icon in the table
-  - [] Add animated icon to the file list?
+  - [x] Add animated icon in the table
+  - [x] Add animated icon to the file list?
 
 --------------
 

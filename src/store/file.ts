@@ -16,6 +16,7 @@ interface State {
   audioState: {
     playing: boolean
     path: string
+    file: DbxFile
     startedAt: number
     pausedAt: number
     volume: number
@@ -33,6 +34,7 @@ export const useFile = defineStore('file', {
     audioState: {
       playing: false,
       path: '',
+      file: {} as DbxFile,
       startedAt: 0,
       pausedAt: 0,
       volume: Number(localStorage.getItem('volume')),
@@ -92,9 +94,13 @@ export const useFile = defineStore('file', {
           return
         }
 
+        const file = this.files.find(file => file.id === path)
+
         /* Init */
         this.audio.src = registeredPath
         this.audioState.path = path
+        if (file)
+          this.audioState.file = file
         this.audioState.elapsed = 0
         this.play()
       }
