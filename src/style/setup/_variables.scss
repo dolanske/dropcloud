@@ -12,7 +12,7 @@
 
   --color-bg-light: #f4f1e7;
   --color-bg: #eae6dc;
-  --color-bg-shade: #d9d6cc;
+  --color-bg-shade: #dfdcd1;
   --color-bg-dark: #c5c0b2;
   --color-border: #d6d3c8;
 
@@ -20,6 +20,8 @@
   --color-primary: #5451ee;
   --color-primary-light: #aaa8f7;
   --color-primary-lighter: #dddcfc;
+
+  --shadow: 0 1px 6px rgba(28, 27, 24, 0.2);
 }
 
 :root.dark-theme {

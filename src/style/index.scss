@@ -14,6 +14,8 @@ html {
   // padding-top: 80px;
 
   * {
+    @include font(400);
+
     // outline: none !important;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;

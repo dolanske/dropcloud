@@ -22,6 +22,7 @@
       @include flex(5px, flex-start, center);
 
       button {
+        @extend .use-button-hover;
         @include flex(0, center, center);
         width: 35px;
         height: 35px;
@@ -34,24 +35,17 @@
           &:after {
             background-color: var(--color-primary-shade);
           }
+
+          &:hover:after {
+            opacity: 0.75;
+          }
         }
 
         &:after {
-          @include radius(5px);
-          @include t(0.1s);
-          content: "";
-          position: absolute;
-          right: 0;
-          left: 0;
-          bottom: 0;
-          height: 0;
           background-color: var(--color-black-light);
-          opacity: 0;
-          z-index: -1;
         }
 
-        &.is-active:after,
-        &:hover:after {
+        &.is-active:after {
           opacity: 1;
           height: 100%;
         }

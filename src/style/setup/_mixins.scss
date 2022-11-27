@@ -97,3 +97,26 @@
     grid-template-columns: $columns;
   }
 }
+
+.use-button-hover {
+  position: relative;
+  z-index: 1;
+
+  &:after {
+    @include radius(5px);
+    @include t(0.1s);
+    content: "";
+    position: absolute;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    height: 0;
+    opacity: 0;
+    z-index: -1;
+  }
+
+  &:hover:after {
+    opacity: 1;
+    height: 100%;
+  }
+}

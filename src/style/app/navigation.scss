@@ -17,47 +17,46 @@
       padding: 0 5px;
 
       a {
+        @extend .use-button-hover;
         @include flex(10px, center, center, $direction: column);
         height: 80px;
         text-decoration: none;
         color: var(--color-text);
         position: relative;
 
-        &:before {
-          @include radius(5px);
-          @include t(0.2s);
-          content: "";
-          position: absolute;
-          right: 0;
-          left: 0;
-          bottom: 0;
-          height: 0;
-          opacity: 0;
-          z-index: -1;
+        // &:before {
+        //   @include radius(5px);
+        //   @include t(0.2s);
+        //   content: "";
+        //   position: absolute;
+        //   right: 0;
+        //   left: 0;
+        //   bottom: 0;
+        //   height: 0;
+        //   opacity: 0;
+        //   z-index: -1;
+        // }
+
+        &:after {
+          background-color: var(--color-bg-shade);
         }
 
         &.router-link-active {
           color: var(--color-primary-lighter);
 
-          &:before {
+          &:after {
+            background-color: var(--color-primary-shade);
             opacity: 1;
             height: 100%;
-            background-color: var(--color-primary-shade) !important;
           }
 
-          &:hover:before {
+          &:hover:after {
             opacity: 0.9;
           }
 
           strong {
             @include font(500);
           }
-        }
-
-        &:hover:before {
-          background-color: var(--color-bg);
-          opacity: 1;
-          height: 100%;
         }
 
         .material-icons {

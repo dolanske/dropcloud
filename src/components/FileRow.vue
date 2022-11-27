@@ -1,7 +1,8 @@
 <script setup lang='ts'>
 import { useDateFormat } from '@vueuse/shared'
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { track } from '@vue/reactivity'
+import { onClickOutside } from '@vueuse/core'
 import { formatFileSize } from '../bin/utils'
 import { useFile } from '../store/file'
 import { useFolder } from '../store/folder'
@@ -22,7 +23,7 @@ const folder = useFolder()
 const tracklist = useTracklist()
 const date = props.file['.tag'] === 'file' ? useDateFormat(props.file?.client_modified, 'DD/MM YYYY') : ''
 
-//
+// Functions
 const size = computed(() => {
   if (props.file['.tag'] === 'file')
     return formatFileSize(props.file.size, 2)
@@ -46,10 +47,15 @@ const hover = ref(false)
 
 // Dropdown Menu
 const open = ref(false)
+const tr = ref()
+
+onMounted(() => {
+  onClickOutside(tr, () => open.value = false)
+})
 </script>
 
 <template>
-  <tr :class="{ 'is-active': isPlaying }" @mouseenter="hover = true" @mouseleave="hover = false">
+  <tr ref="tr" :class="{ 'is-active': isPlaying, 'is-hovered': hover || open }" @mouseenter="hover = true" @mouseleave="hover = false">
     <td v-if="file['.tag'] === 'folder'" @click="goToFile()">
       <Icon code="e2c7" />
     </td>
@@ -72,16 +78,18 @@ const open = ref(false)
       {{ date }}
     </td>
     <td>
-      <button v-if="file['.tag'] === 'file'" @click="open = !open">
+      <button v-if="file['.tag'] === 'file'" class="dropdown-button-open" @click="open = !open">
         <Icon v-show="hover" code="e5d4" />
       </button>
+
+      <div class="dropdown" :class="{ 'is-open': open }">
+        <button @click="updateAudioState">
+          Play
+        </button>
+        <button>Open in Player</button>
+        <button>Add to Queue</button>
+        <button>Share Link</button>
+      </div>
     </td>
-    <!-- <pre>
-      {{ file }}
-     </pre>
-    <hr>
-    <pre>
-      {{ metadata }}
-     </pre> -->
   </tr>
 </template>

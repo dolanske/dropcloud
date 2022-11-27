@@ -58,7 +58,7 @@
                 color: var(--color-primary);
 
                 &:after {
-                  opacity: 0.2;
+                  opacity: 1;
                   height: 100%;
                 }
 
@@ -71,6 +71,7 @@
             button {
               @include flex(10px, flex-start, center);
               @include font(400);
+              @extend .use-button-hover;
               // width: 100%;
               text-align: left;
               padding: 6px 10px;
@@ -83,25 +84,10 @@
               }
 
               &:after {
-                @include radius(5px);
-                @include t(0.1s);
-                content: "";
-                position: absolute;
-                right: 0;
-                left: 0;
-                bottom: 0;
-                height: 0;
-                background-color: var(--color-bg-dark);
-                opacity: 0;
-                z-index: -1;
+                background-color: var(--color-bg-shade);
               }
 
               &:hover {
-                &:after {
-                  opacity: 0.3;
-                  height: 100%;
-                }
-
                 .material-icons {
                   color: var(--color-text);
                 }
@@ -113,10 +99,7 @@
     }
 
     .table-wrapper {
-      // padding-top: 20px;
-      // padding-left: 20px;
       padding-bottom: 84px;
-      // padding: 0 20px;
 
       table {
         margin-left: 20px;
@@ -167,7 +150,7 @@
         tbody tr {
           cursor: pointer;
 
-          &:hover {
+          &.is-hovered {
             td {
               background-color: var(--color-bg-light);
 
@@ -222,8 +205,9 @@
 
               font-size: 1.3rem;
               text-align: left;
+              position: relative;
 
-              button {
+              .dropdown-button-open {
                 @include radius(2px);
                 display: block;
                 margin: 0;
