@@ -34,7 +34,7 @@
 
       aside {
         position: sticky;
-        top: 40px;
+        top: 20px;
         max-height: calc(100vh - 120px);
         overflow-y: auto;
         overflow-x: hidden;
@@ -71,7 +71,7 @@
             button {
               @include flex(10px, flex-start, center);
               @include font(400);
-              width: 100%;
+              // width: 100%;
               text-align: left;
               padding: 6px 10px;
               font-size: 1.3rem;
@@ -116,10 +116,14 @@
       // padding-top: 20px;
       // padding-left: 20px;
       padding-bottom: 84px;
+      // padding: 0 20px;
 
       table {
         margin-left: 20px;
-        width: 100%;
+        margin-right: 20px;
+        width: calc(100% - 40px);
+        max-width: 1280px;
+
         table-layout: fixed;
         border-collapse: collapse;
 
@@ -136,19 +140,27 @@
           background-color: var(--color-white);
 
           &:first-child {
-            width: 50px;
+            width: 50px !important;
+            min-width: 50px !important;
+            max-width: 50px !important;
           }
 
           &:nth-child(2) {
-            width: 90%;
+            width: 60%;
           }
 
           &:nth-child(3) {
-            width: 30%;
+            width: 20%;
           }
 
           &:nth-child(4) {
-            width: 30%;
+            width: 20%;
+          }
+
+          &:nth-child(5) {
+            width: 30px !important;
+            min-width: 30px !important;
+            max-width: 30px !important;
           }
         }
 
@@ -169,7 +181,7 @@
 
           td {
             @include t();
-            padding: 10px 0;
+            padding: 12px 0;
             vertical-align: middle;
 
             &:hover {
@@ -207,6 +219,46 @@
 
             &:last-of-type {
               @include radius(0 5px 5px 0);
+
+              font-size: 1.3rem;
+              text-align: left;
+
+              button {
+                @include radius(2px);
+                display: block;
+                margin: 0;
+                padding: 0;
+                height: 24px;
+                width: 24px;
+                z-index: 5;
+                position: relative;
+
+                &:hover:after {
+                  opacity: 1;
+                  height: 100%;
+                }
+
+                &:after {
+                  @include radius(5px);
+                  @include t(0.1s);
+                  content: "";
+                  position: absolute;
+                  right: 0;
+                  left: 0;
+                  bottom: 0;
+                  height: 0;
+                  background-color: var(--color-bg-shade);
+                  opacity: 0;
+                  z-index: -1;
+                }
+
+                .material-icons {
+                  position: absolute;
+                  left: 50%;
+                  top: 50%;
+                  transform: translate(-50%, -50%);
+                }
+              }
             }
           }
         }

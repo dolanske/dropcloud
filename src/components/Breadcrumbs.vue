@@ -9,8 +9,10 @@ const file = useFile()
 
 const links = computed(() => folder.active?.path_lower?.split('/')?.filter(item => item) ?? [])
 
-function open(part: string) {
+function open(link: string) {
+  const path = folder.active.path_lower.split(link)[0] + link
 
+  folder.open(path)
 }
 </script>
 
@@ -20,8 +22,8 @@ function open(part: string) {
       {{ capitalize(link) }}
     </button>
 
-    <!-- <div class="flex-1" />
+    <div class="flex-1" />
 
-    <p>{{ file.files.length }} Files</p> -->
+    <p>{{ file.files.length }} files</p>
   </div>
 </template>

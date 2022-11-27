@@ -16,3 +16,7 @@
     @include grid(0, 80px 1fr);
   }
 }
+
+.flex-1 {
+  flex: 1;
+}

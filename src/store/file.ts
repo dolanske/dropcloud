@@ -26,6 +26,8 @@ interface State {
   files: DbxFile[]
 }
 
+export const supportedMedia = ['.wav', '.mp3', '.flac']
+
 export const useFile = defineStore('file', {
   state: () => ({
     audioState: {
@@ -47,7 +49,10 @@ export const useFile = defineStore('file', {
 
       await post('/files/list_folder', { path })
         .then((response) => {
-          this.files = response.entries.filter((item: DbxFile) => !item.name.startsWith('._'))
+          this.files = response.entries.filter((item: DbxFile) =>
+            !item.name.startsWith('._'),
+            // || !supportedMedia.some(media => item.name.endsWith(media)),
+          )
         })
     },
 

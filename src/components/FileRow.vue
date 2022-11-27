@@ -43,6 +43,9 @@ function goToFile() {
 
 const isPlaying = computed(() => props.file.id === files.audioState.path && files.audioState.playing)
 const hover = ref(false)
+
+// Dropdown Menu
+const open = ref(false)
 </script>
 
 <template>
@@ -67,6 +70,11 @@ const hover = ref(false)
     </td>
     <td @click="goToFile()">
       {{ date }}
+    </td>
+    <td>
+      <button v-if="file['.tag'] === 'file'" @click="open = !open">
+        <Icon v-show="hover" code="e5d4" />
+      </button>
     </td>
     <!-- <pre>
       {{ file }}

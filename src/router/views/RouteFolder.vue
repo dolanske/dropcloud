@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, reactive, ref, watch, watchEffect } from 'vue'
-import { concat, get, isEmpty, isNil, isObject, isObjectLike, set, sortBy } from 'lodash'
+import { concat, get, isEmpty, isNil, isObject, isObjectLike, orderBy, set, sortBy } from 'lodash'
 import { useState } from '../../store/state'
 import { post } from '../../bin/fetch'
 import { useFile } from '../../store/file'
@@ -84,46 +84,48 @@ const sortedFiles = computed(() => {
   if (!file.files)
     return []
 
-  return sortBy(file.files, [o => o.name])
+  return orderBy(file.files, ['.tag', 'name'], ['desc', 'asc'])
 })
 </script>
 
 <template>
   <div class="route-folder">
     <div class="route-content">
-      <div class="container">
-        <div class="wrapper">
-          <div class="sidebar-wrapper">
-            <aside>
-              <h5>Library</h5>
+      <!-- <div class="container"> -->
+      <div class="wrapper">
+        <div class="sidebar-wrapper">
+          <aside>
+            <h5>Library</h5>
 
-              <ul class="folder-structure">
-                <FolderItem v-for="(item, key) in folder.folderStructure" :key="key" :label="key" :values="item" />
-              </ul>
-            </aside>
-          </div>
-          <div class="table-wrapper">
-            <Breadcrumbs />
-            <table v-if="sortedFiles.length > 0">
-              <thead>
-                <tr>
-                  <th />
-                  <th>Name</th>
-                  <th>Size</th>
-                  <th>Created</th>
-                </tr>
-              </thead>
-              <tbody>
-                <FileRow v-for="item in sortedFiles" :key="item.id" :file="item" />
-              </tbody>
-            </table>
-            <div v-else class="no-results">
-              <h2>Bruh</h2>
-              <p>This file does not contain any files or sub folders.</p>
-            </div>
+            <ul class="folder-structure">
+              <FolderItem v-for="(item, key) in folder.folderStructure" :key="key" :label="key" :values="item" />
+            </ul>
+          </aside>
+        </div>
+        <div class="table-wrapper">
+          <Breadcrumbs />
+
+          <table v-if="sortedFiles.length > 0">
+            <thead>
+              <tr>
+                <th />
+                <th>Name</th>
+                <th>Size</th>
+                <th>Created</th>
+                <th />
+              </tr>
+            </thead>
+            <tbody>
+              <FileRow v-for="item in sortedFiles" :key="item.id" :file="item" />
+            </tbody>
+          </table>
+          <div v-else class="no-results">
+            <h2>Bruh</h2>
+            <p>This file does not contain any files or sub folders.</p>
           </div>
         </div>
       </div>
+      <!-- </div> -->
     </div>
 
     <!-- <a :href="url">Login</a> -->

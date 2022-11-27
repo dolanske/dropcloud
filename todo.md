@@ -25,8 +25,6 @@
   - [] Add animated icon in the table
   - [] Add animated icon to the file list?
 
-
-
 --------------
 
 ## Tasks #1 (25/11/2022)
@@ -37,7 +35,7 @@
 - [x] Fix folder file count
 - [x] If progress is updated while paused, it ignores it and resumes where it ended
 
-## Tasks #2 (25/11/2022)
+## Tasks #2 (26-27/11/2022)
 
 - [x] Create a history registry
 - [x] Cache downloaded files
@@ -47,11 +45,3 @@
   - next goes (random if on shuffle) or (next one in queue) or (next logical one in list)
 - [] Create queue
 - [] Implement repeating of the currently active song
-
-
-## Tasks #3 
-
-- [Folder] [] Stop using container and spread table to the rest of the view
-  - [] Remove breadcrumbs infinite :before
-  - [] Remove sidebar-navigation infinite :before
-  - [] Add list of all files in current folder to the top right of the page 

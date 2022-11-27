@@ -3,25 +3,24 @@
   position: relative;
   margin-bottom: 20px;
   padding: 20px;
-  // padding-left: 70px;
+  width: 100%;
+  border-bottom: 1px solid var(--color-border);
+  background-color: var(--color-bg-light);
 
-  &:before {
-    content: "";
-    border-bottom: 1px solid var(--color-border);
-    background-color: var(--color-bg-light);
-    position: absolute;
-    inset: 0;
-    right: unset;
-    width: 5000px;
+  p,
+  button {
+    @include font(400);
+    font-size: 1.2rem;
+  }
+
+  p {
+    color: var(--color-text);
   }
 
   button {
-    @include font(400);
-    color: var(--color-text-light);
     padding: 0;
-    // font-style: italic;
-    font-size: 1.2rem;
     position: relative;
+    color: var(--color-text-light);
 
     &:last-of-type {
       color: var(--color-text);
@@ -38,14 +37,12 @@
       top: 50%;
       transform: translateY(-50%);
       left: calc(100% + 18px);
-      // transform: translateY(-);
       font-size: 1rem;
     }
 
     &:hover {
-      // text-decoration: underline;
-      opacity: 1;
+      color: var(--color-text);
+      text-decoration: underline;
     }
   }
-  // dbn1
 }
