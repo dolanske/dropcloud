@@ -23,11 +23,20 @@ export const useFolder = defineStore('folder', {
       this.folders = folders
       this.folderStructure = structure
     },
-    open(path: string) {
+    async open(path: string) {
       const doesExist = this.folders.find(item => item.path_lower === path || item.name === path || item.id === path)
 
-      if (doesExist)
-        this.active = doesExist
+      if (!doesExist || this.active === doesExist)
+        return
+
+      this.active = doesExist
+
+      // If we provide a file, it means we want to scroll to it upon opening the new folder
+      // if (fileId) {
+      //   const target = document.querySelector(`#${fileId}`)
+      //   if (target)
+      //     target.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+      // }
     },
   },
   getters: {

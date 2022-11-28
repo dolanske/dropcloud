@@ -1,8 +1,13 @@
+<script setup lang="ts">
+import { useFile } from '../../store/file'
+const file = useFile()
+</script>
+
 <template>
   <div class="eq-icon">
-    <span />
-    <span />
-    <span />
+    <span :style="{ animationPlayState: file.audioState.playing ? 'running' : 'paused' }" />
+    <span :style="{ animationPlayState: file.audioState.playing ? 'running' : 'paused' }" />
+    <span :style="{ animationPlayState: file.audioState.playing ? 'running' : 'paused' }" />
   </div>
 </template>
 

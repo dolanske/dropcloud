@@ -42,7 +42,7 @@ function goToFile() {
     folder.open(props.file.id)
 }
 
-const isPlaying = computed(() => props.file.id === files.audioState.path && files.audioState.playing)
+const isPlaying = computed(() => props.file.id === files.audioState.path)
 const hover = ref(false)
 
 // Dropdown Menu
@@ -55,7 +55,13 @@ onMounted(() => {
 </script>
 
 <template>
-  <tr ref="tr" :class="{ 'is-active': isPlaying, 'is-hovered': hover || open }" @mouseenter="hover = true" @mouseleave="hover = false">
+  <tr
+    :id="file.id"
+    ref="tr"
+    :class="{ 'is-active': isPlaying, 'is-hovered': hover || open }"
+    @mouseenter="hover = true"
+    @mouseleave="hover = false"
+  >
     <td v-if="file['.tag'] === 'folder'" @click="goToFile()">
       <Icon code="e2c7" />
     </td>

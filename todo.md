@@ -19,9 +19,9 @@
 - [Player] []  Add a fade in & out when pausing song, dont just cut to 100% or 0% volume volume
 - [Player] []  Fix song progress either being 1 second shorter or 1 second longer when song ends. (possibly just auto set when song stops playing?)
 
-- [Breadcrumbs] []  Implement breadcrumbs
+- [Breadcrumbs] [x]  Implement breadcrumbs
 
-- [List] []  Add proper highlight of which song is being played right now (possibly highlight in the folder structure too?)
+- [List] [x]  Add proper highlight of which song is being played right now (possibly highlight in the folder structure too?)
   - [x] Add animated icon in the table
   - [x] Add animated icon to the file list?
 

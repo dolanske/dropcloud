@@ -145,15 +145,15 @@
         text-overflow: ellipsis;
 
         text-align: right;
+        color: var(--dark-color-text-light);
+        font-size: 1.2rem;
 
-        button {
-          color: var(--dark-color-text-light);
-          font-size: 1.2rem;
+        // button {
 
-          &:hover {
-            text-decoration: underline;
-          }
-        }
+        //   &:hover {
+        //     text-decoration: underline;
+        //   }
+        // }
       }
     }
   }

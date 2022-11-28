@@ -1,6 +1,7 @@
 <script setup lang='ts'>
-import { computed, reactive, ref, watch, watchEffect } from 'vue'
+import { computed, nextTick, reactive, ref, unref, watch, watchEffect } from 'vue'
 import { onClickOutside } from '@vueuse/core'
+import { useRouter } from 'vue-router'
 import { useFile } from '../store/file'
 import { useTracklist } from '../store/tracklist'
 import { formatPathWithoutName, getFormattedlength, now } from '../bin/utils'
@@ -11,6 +12,7 @@ import { useFolder } from '../store/folder'
 const tracklist = useTracklist()
 const file = useFile()
 const folder = useFolder()
+const router = useRouter()
 
 // Get relevant files
 const metadata = computed(() => file.audioState.file)
@@ -19,10 +21,16 @@ const progress = computed(() => {
   return (file.audioState.elapsed / file.audio.duration) * 100
 })
 
-function openAudioFolder() {
-  if (metadata.value)
-    folder.open(formatPathWithoutName(metadata.value.path_lower))
-}
+// async function openAudioFolder() {
+//   if (metadata.value) {
+//     await router.push({ name: 'RouteLibrary' })
+//     folder.open(formatPathWithoutName(metadata.value.path_lower))
+//   }
+// }
+
+/* ---------------- // SECTION // ---------------- */
+// Repeat
+const repeat = ref(false)
 
 /* ---------------- // SECTION // ---------------- */
 // Audio events
@@ -33,7 +41,15 @@ audio.value.addEventListener('timeupdate', (e: any) => {
   file.audioState.elapsed = (now() - file.audioState.startedAt) / 1000
 })
 
-audio.value.addEventListener('ended', () => {
+audio.value.addEventListener('ended', async () => {
+  if (repeat.value) {
+    // If we have set repeat ON, just toggle play when it ends
+    await nextTick()
+    file.play()
+
+    return
+  }
+
   file.reset()
 })
 
@@ -105,10 +121,6 @@ async function previous() {
   await file.dwFile(track)
   file.updateAudioState(track)
 }
-
-/* ---------------- // SECTION // ---------------- */
-// Repeat
-const repeat = ref(false)
 </script>
 
 <template>
@@ -191,9 +203,9 @@ const repeat = ref(false)
 
         <div class="player-file">
           <p v-if="metadata">
-            <button @click="openAudioFolder">
-              {{ metadata.name }}
-            </button>
+            <!-- <button @click="openAudioFolder"> -->
+            {{ metadata.name }}
+            <!-- </button> -->
           </p>
         </div>
       </div>

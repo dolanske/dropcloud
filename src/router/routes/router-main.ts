@@ -1,4 +1,4 @@
-import RouteFolder from '../views/RouteFolder.vue'
+import RouteLibrary from '../views/RouteLibrary.vue'
 import RoutePlayer from '../views/RoutePlayer.vue'
 import RouteSearch from '../views/RouteSearch.vue'
 import RouteTracklist from '../views/RouteTracklist.vue'
@@ -6,12 +6,12 @@ import RouteTracklist from '../views/RouteTracklist.vue'
 export default [
   {
     path: '/:pathMatch(.*)*',
-    redirect: { name: 'RouteFolder' },
+    redirect: { name: 'RouteLibrary' },
   },
   {
-    path: '/folder',
-    name: 'RouteFolder',
-    component: RouteFolder,
+    path: '/library',
+    name: 'RouteLibrary',
+    component: RouteLibrary,
     meta: {
       title: 'Your music folder',
     },
