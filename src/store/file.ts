@@ -3,6 +3,7 @@ import { defineStore } from 'pinia'
 import { download, post } from '../bin/fetch'
 import { now } from '../bin/utils'
 import type { DbxFile } from '../types/dropbox-types'
+import type { AudioFileNode } from '../types/audio-types'
 import { useTracklist } from './tracklist'
 import { useLoading } from './loading'
 
@@ -23,7 +24,7 @@ interface State {
     elapsed: number
   }
   audio: HTMLAudioElement
-  registry: Map<string, string>
+  registry: Map<string, AudioFileNode>
   files: DbxFile[]
 }
 
@@ -73,22 +74,21 @@ export const useFile = defineStore('file', {
         headers: { 'Dropbox-API-Arg': JSON.stringify({ path }) },
       })
 
-      return file
-        .then(res => res.blob())
-        .then((data) => {
-          const audioUrl = URL.createObjectURL(data)
-          this.registry.set(path, audioUrl)
-        })
-        .finally(() => {
+      return file.then(res => res.blob())
+        .then(async (raw) => {
+          const url = URL.createObjectURL(raw)
+          const buffer = await raw.arrayBuffer()
+          this.registry.set(path, { url, raw, buffer })
+
           loading.del(path)
         })
     },
 
     // Audio actions
     updateAudioState(path: string) {
-      const registeredPath = this.registry.get(path)
+      const { url } = this.registry.get(path) ?? {}
 
-      if (registeredPath) {
+      if (url) {
         if (path === this.audioState.path) {
           this.toggle()
           return
@@ -97,7 +97,7 @@ export const useFile = defineStore('file', {
         const file = this.files.find(file => file.id === path)
 
         /* Init */
-        this.audio.src = registeredPath
+        this.audio.src = url
         this.audioState.path = path
         if (file)
           this.audioState.file = file
@@ -190,6 +190,6 @@ export const useFile = defineStore('file', {
   },
   getters: {
     getFileData: state => (path: string) => state.files.find((file: any) => file?.id === path),
-    getAudioNode: state => (path: string) => state.registry.get(path),
+    getAudioNode: state => state.registry.get(state.audioState.path),
   },
 })

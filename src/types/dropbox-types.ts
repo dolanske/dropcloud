@@ -27,3 +27,4 @@ export interface DbxFile {
 }
 
 export type DbxStructure = Record<string, string | {}>
+
