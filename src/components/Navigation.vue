@@ -33,6 +33,12 @@
           <strong>Search</strong>
         </router-link>
       </li>
+      <li>
+        <router-link :to="{ name: 'RouteSearch' }">
+          <Icon code="e8b8" size="2.4" />
+          <strong>Settings</strong>
+        </router-link>
+      </li>
     </ul>
   </aside>
 </template>
