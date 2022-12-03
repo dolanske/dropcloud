@@ -1,0 +1,39 @@
+.button {
+  @include font(400);
+  display: inline-flex;
+  justify-content: center;
+  height: 40px;
+  line-height: 40px;
+  padding: 0 15px;
+  text-transform: uppercase;
+  text-decoration: none;
+  font-size: 1.4rem;
+
+  // Variations
+
+  &.btn-icon {
+    display: inline-flex;
+    justify-items: center;
+    align-items: center;
+    width: 40px;
+    padding: 0;
+  }
+}
+
+// Colors
+
+.button.btn-black {
+  @extend .use-button-hover;
+
+  background-color: var(--color-black);
+  color: var(--dark-color-text);
+
+  &:after {
+    @include radius(0);
+    background-color: var(--color-black-light);
+  }
+
+  // &:hover {
+
+  // }
+}

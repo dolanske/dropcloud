@@ -34,6 +34,12 @@ export function getUrlQuery(...fields: string[]): Record<string, string | number
   }, {})
 }
 
+// Rounds a number to a set precision. Displays decimals only if needed
+export function round(value: number, precision = 0) {
+  const multiplier = 10 ** precision
+  return Math.round(value * multiplier) / multiplier
+}
+
 // Returns an object of all url hash parameters
 export function getUrlHashQuery<T>() {
   const hash = window.location.hash.substring(1)
@@ -58,8 +64,8 @@ export function formatFileSize(bytes: string | number, decimals?: number) {
     return 0
 
   if (bytes / 1000000 > 1)
-    return decimals ? `${(bytes / 1000000).toFixed(decimals)}MB` : `${bytes / 1000000}MB`
-  return decimals ? `${(bytes / 1000).toFixed(decimals)}KB` : `${bytes / 1000}KB`
+    return decimals ? `${round(bytes / 1000000, 2)} MB` : `${bytes / 1000000}MB`
+  return decimals ? `${round(bytes / 1000, 2)} KB` : `${bytes / 1000}KB`
 }
 
 // Returns a formatted length of time in seconds
@@ -74,4 +80,9 @@ export function getFormattedlength(s = 1) {
 // Returns a path from a file without its name
 export function formatPathWithoutName(path: string) {
   return path.split('/').slice(0, -1).join('/')
+}
+
+// Takes in an amount of HZ and adds a k Hz to it
+export function formatSampleRate(number: number) {
+  return `${number / 1000} kHz`
 }

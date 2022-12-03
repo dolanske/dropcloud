@@ -5,15 +5,17 @@ import { useState } from '../../store/state'
 import { post } from '../../bin/fetch'
 import { useFile } from '../../store/file'
 import { useFolder } from '../../store/folder'
+import type { DbxFolder, DbxRequest, DbxStructure } from '../../types/dropbox-types'
 
 import FileRow from '../../components/FileRow.vue'
 import FolderItem from '../../components/FolderItem.vue'
-import type { DbxFolder, DbxRequest, DbxStructure } from '../../types/dropbox-types'
 import Breadcrumbs from '../../components/Breadcrumbs.vue'
+import { useLoading } from '../../store/loading'
 
 const state = useState()
 const file = useFile()
 const folder = useFolder()
+const loading = useLoading()
 
 const rootPath = '/music'
 
@@ -40,6 +42,8 @@ const add = (source: string, target: Record<any, any>) => {
 // Once we are loaded and have a token
 onMounted(async () => {
   if (state.token) {
+    loading.set('init-folder')
+
     // file.fetchFilesFromPath(rootPath)
     folder.$patch({ root: rootPath })
 
@@ -71,6 +75,8 @@ onMounted(async () => {
         folder.$patch({ active: folders[0] })
       }
     }
+
+    loading.del('init-folder')
   }
 })
 
@@ -94,7 +100,8 @@ const sortedFiles = computed(() => {
       <!-- <div class="container"> -->
       <div class="wrapper">
         <div class="sidebar-wrapper">
-          <aside>
+          <Bar v-if="(loading.get('init-folder') || !folder.folderStructure)" :width="156" />
+          <aside v-else>
             <h5>Library</h5>
 
             <ul class="folder-structure">
@@ -103,26 +110,31 @@ const sortedFiles = computed(() => {
           </aside>
         </div>
         <div class="table-wrapper">
-          <Breadcrumbs />
+          <Transition name="fade" mode="out-in" appear>
+            <Bar v-if="loading.get('folder')" />
+            <div v-else>
+              <Breadcrumbs />
 
-          <table v-if="sortedFiles.length > 0">
-            <thead>
-              <tr>
-                <th />
-                <th>Name</th>
-                <th>Size</th>
-                <th>Created</th>
-                <th />
-              </tr>
-            </thead>
-            <tbody>
-              <FileRow v-for="item in sortedFiles" :key="item.id" :file="item" />
-            </tbody>
-          </table>
-          <div v-else class="no-results">
-            <h2>Bruh</h2>
-            <p>This file does not contain any files or sub folders.</p>
-          </div>
+              <table v-if="sortedFiles.length > 0">
+                <thead>
+                  <tr>
+                    <th />
+                    <th>Name</th>
+                    <th>Size</th>
+                    <th>Created</th>
+                    <th />
+                  </tr>
+                </thead>
+                <tbody>
+                  <FileRow v-for="item in sortedFiles" :key="item.id" :file="item" />
+                </tbody>
+              </table>
+              <div v-else class="no-results">
+                <h2>Bruh</h2>
+                <p>This file does not contain any files or sub folders.</p>
+              </div>
+            </div>
+          </Transition>
         </div>
       </div>
       <!-- </div> -->

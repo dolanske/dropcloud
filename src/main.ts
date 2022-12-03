@@ -6,6 +6,7 @@ import router from './router'
 
 // Global Components
 import Icon from './components/global/Icon.vue'
+import Bar from './components/global/Bar.vue'
 
 const app = createApp(App)
 
@@ -15,6 +16,7 @@ app.use(createPinia())
 
 // Register global components
 app.component('Icon', Icon)
+app.component('Bar', Bar)
 
 // Final mount
 app.mount('#app')

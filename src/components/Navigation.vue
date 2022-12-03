@@ -24,7 +24,7 @@
       <li>
         <router-link :to="{ name: 'RouteTracklist' }">
           <Icon code="e8de" size="2.4" />
-          <strong>Tracklist</strong>
+          <strong>Queue</strong>
         </router-link>
       </li>
       <li>

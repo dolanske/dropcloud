@@ -1,6 +1,6 @@
 import { omit } from 'lodash'
 
-export function formatDate(date: Date | number, toOmit?: Array<any>) {
+export function formatDate(date: Date | number | string, toOmit?: Array<any>) {
   if (typeof date === 'number')
     date *= 1000
 

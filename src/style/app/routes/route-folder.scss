@@ -3,6 +3,13 @@
     padding-top: 40px;
   }
 
+  .progress-bar {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
   .route-content {
     .wrapper {
       @include grid(0, 384px 1fr);
@@ -16,6 +23,7 @@
       padding: 20px;
       padding-top: 20px;
       padding-right: 20px;
+      position: relative;
       background-color: var(--color-bg-light);
 
       &:before {
@@ -72,7 +80,6 @@
               @include flex(10px, flex-start, center);
               @include font(400);
               @extend .use-button-hover;
-              // width: 100%;
               text-align: left;
               padding: 6px 10px;
               font-size: 1.3rem;
@@ -100,6 +107,7 @@
 
     .table-wrapper {
       padding-bottom: 256px;
+      position: relative;
 
       table {
         margin-left: 20px;
@@ -172,7 +180,7 @@
           }
 
           td {
-            @include t();
+            // @include t();
             padding: 12px 0;
             vertical-align: middle;
 

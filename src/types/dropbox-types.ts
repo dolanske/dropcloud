@@ -15,6 +15,7 @@ export interface DbxFolder {
 export interface DbxFile {
   '.tag': 'file'
   name: string
+  extension: string
   path_lower: string
   path_display: string
   id: string

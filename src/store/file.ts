@@ -23,6 +23,8 @@ interface State {
     volume: number
     elapsed: number
   }
+  vizualizations: Map<string, number[]>
+  sampleRates: Map<string, number>
   audio: HTMLAudioElement
   registry: Map<string, AudioFileNode>
   files: DbxFile[]
@@ -42,7 +44,9 @@ export const useFile = defineStore('file', {
       elapsed: 0,
     },
     audio: document.createElement('audio'),
+    sampleRates: new Map(),
     registry: new Map(),
+    vizualizations: new Map(),
     files: [],
   } as State),
   actions: {
@@ -50,17 +54,25 @@ export const useFile = defineStore('file', {
       if (!path)
         return
 
+      const loading = useLoading()
+      loading.set('folder')
+
       await post('/files/list_folder', { path })
         .then((response) => {
-          this.files = response.entries.filter((item: DbxFile) =>
-            !item.name.startsWith('._'),
+          this.files = response.entries.filter((file: DbxFile) =>
+            !file.name.startsWith('._'),
             // || !supportedMedia.some(media => item.name.endsWith(media)),
-          )
+          ).map((file: DbxFile) => {
+            const [name, extension] = file.name.split(/(?:\.([^.]+))?$/)
+            Object.assign(file, { name, extension })
+            return file
+          })
+
+          loading.del('folder')
         })
     },
 
     async dwFile(path: string) {
-      // TODO: test and/or fix caching registry
       const loading = useLoading()
 
       // Do not download cached files
@@ -187,9 +199,18 @@ export const useFile = defineStore('file', {
     // changeTime(by: number) {
     //   const newElapsed = this.audioState.elapsed + by
     // },
+
+    saveVizualization(path: string, value: number[]) {
+      this.vizualizations.set(path, value)
+    },
+    saveSampleRate(path: string, number: number) {
+      this.sampleRates.set(path, number)
+    },
   },
   getters: {
     getFileData: state => (path: string) => state.files.find((file: any) => file?.id === path),
     getAudioNode: state => state.registry.get(state.audioState.path),
+    getVizualization: state => (path: string) => state.vizualizations.get(path),
+    getSampleRate: state => (path: string) => state.sampleRates.get(path),
   },
 })

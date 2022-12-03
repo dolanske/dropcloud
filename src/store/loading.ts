@@ -28,7 +28,7 @@ export const useLoading = defineStore('loading', {
       state =>
         (...items: Array<string>) => {
           if (items && items.length > 0)
-            return Array.from(state.loading).some((item: any) => items.includes(item))
+            return Array.from(state.loading).some((item: string) => items.includes(item))
 
           return state.loading.size > 0
         },

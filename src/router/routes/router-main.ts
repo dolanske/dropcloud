@@ -14,21 +14,34 @@ export default [
     component: RouteLibrary,
     meta: {
       title: 'Your music folder',
+      name: 'Library',
     },
   },
   {
     path: '/player/:id?',
     name: 'RoutePlayer',
     component: RoutePlayer,
+    meta: {
+      title: 'Player & Vizualizedr',
+      name: 'Player',
+    },
   },
   {
     path: '/search',
     name: 'RouteSearch',
     component: RouteSearch,
+    meta: {
+      title: 'Search for songs',
+      name: 'Search',
+    },
   },
   {
     path: '/tracklist',
     name: 'RouteTracklist',
     component: RouteTracklist,
+    meta: {
+      title: 'History & Query',
+      name: 'Tracklist',
+    },
   },
 ]

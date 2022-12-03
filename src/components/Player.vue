@@ -136,7 +136,7 @@ async function previous() {
 
           <!-- play-pause button -->
 
-          <button data-title-top="Play" @click="file.toggle()">
+          <button :data-title-top="file.audioState.playing ? 'Pause' : 'Play'" @click="file.toggle()">
             <Icon v-if="file.audioState.playing" code="e034" />
             <Icon v-else code="e1c4" />
           </button>
