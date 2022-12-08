@@ -11,11 +11,6 @@ const loading = useLoading()
 const file = useFile()
 const router = useRouter()
 
-// NOTE
-// Use this for the live audio vizualizer
-// https://developer.mozilla.org/en-US/docs/Web/API/BaseAudioContext/createAnalyser
-// https://github.com/mdn/webaudio-examples/blob/f58a57b47ad4f4ec57bbfe169b3cf79490408b98/voice-change-o-matic/scripts/app.js#L194
-
 /* ---------------- // SECTION // ---------------- */
 // Analyze volumes of an entire song and return an array of values between 0 and 1
 
@@ -166,6 +161,21 @@ const elapsed = computed(() => file.audioState.elapsed)
 async function goToFolder() {
   await router.push({ name: 'RouteLibrary' })
 }
+
+/* ---------------- // SECTION // ---------------- */
+// Live audio visualiser
+
+// NOTE
+// Use this for the live audio vizualizer
+// https://developer.mozilla.org/en-US/docs/Web/API/BaseAudioContext/createAnalyser
+// https://github.com/mdn/webaudio-examples/blob/f58a57b47ad4f4ec57bbfe169b3cf79490408b98/voice-change-o-matic/scripts/app.js#L194
+
+// const analyzer =
+
+// onMounted(() => {
+//   const ctx = new AudioContext()
+//   const analyzer = ctx.createAnalyser()
+// })
 </script>
 
 <template>
