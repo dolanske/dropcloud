@@ -86,3 +86,6 @@ export function formatPathWithoutName(path: string) {
 export function formatSampleRate(number: number) {
   return `${number / 1000} kHz`
 }
+
+// Creates an average from the provided array of numbers
+export const average = (arr: number[]) => arr.reduce((p, c) => p + c, 0) / arr.length

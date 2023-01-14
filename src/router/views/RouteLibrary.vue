@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref, watch, watchEffect } from 'vue'
-import { concat, get, isEmpty, isNil, isObject, isObjectLike, orderBy, set, sortBy } from 'lodash'
+import { computed, onMounted, reactive, watch } from 'vue'
+import { concat, isEmpty, isObject, orderBy } from 'lodash'
 import { useState } from '../../store/state'
 import { post } from '../../bin/fetch'
 import { useFile } from '../../store/file'
@@ -18,6 +18,23 @@ const folder = useFolder()
 const loading = useLoading()
 
 const rootPath = '/music'
+
+// Sorting
+interface Sorting {
+  type: 'name' | 'size' | 'client_modified'
+  order: 'desc' | 'asc'
+}
+const sorting = reactive<Sorting>({
+  type: 'name',
+  order: 'desc',
+})
+
+function toggleSorting(type: Sorting['type']) {
+  sorting.order = type === sorting.type
+    ? sorting.order === 'desc' ? 'asc' : 'desc'
+    : 'desc'
+  sorting.type = type
+}
 
 // Recursively creates a nested object of folders and their subfolders
 const add = (source: string, target: Record<any, any>) => {
@@ -90,7 +107,7 @@ const sortedFiles = computed(() => {
   if (!file.files)
     return []
 
-  return orderBy(file.files, ['.tag', 'name'], ['desc', 'asc'])
+  return orderBy(file.files, ['.tag', sorting.type], ['desc', sorting.order])
 })
 </script>
 
@@ -119,9 +136,24 @@ const sortedFiles = computed(() => {
                 <thead>
                   <tr>
                     <th />
-                    <th>Name</th>
-                    <th>Size</th>
-                    <th>Created</th>
+                    <th :class="{ 'is-sorting': sorting.type === 'name' }">
+                      <button @click="toggleSorting('name')">
+                        Name
+                        <Icon :code="sorting.order === 'desc' ? 'e5db' : 'e5d8'" size="1.6" />
+                      </button>
+                    </th>
+                    <th :class="{ 'is-sorting': sorting.type === 'size' }">
+                      <button @click="toggleSorting('size')">
+                        Size
+                        <Icon :code="sorting.order === 'desc' ? 'e5db' : 'e5d8'" size="1.6" />
+                      </button>
+                    </th>
+                    <th :class="{ 'is-sorting': sorting.type === 'client_modified' }">
+                      <button @click="toggleSorting('client_modified')">
+                        Uploaded
+                        <Icon :code="sorting.order === 'desc' ? 'e5db' : 'e5d8'" size="1.6" />
+                      </button>
+                    </th>
                     <th />
                   </tr>
                 </thead>

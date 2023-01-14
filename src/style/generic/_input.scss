@@ -75,3 +75,36 @@
     border-top: 5px solid var(--color-black);
   }
 }
+
+.input-item {
+  display: block;
+  position: relative;
+
+  .dropdown {
+    max-height: 256px;
+    overflow-y: auto;
+    left: 0;
+    right: unset;
+  }
+
+  &.text-input {
+    label {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      text-transform: uppercase;
+      color: var(--color-text-light);
+    }
+
+    input[type="text"] {
+      @include font(400);
+      border: 2px solid var(--color-border);
+      height: 40px;
+      line-height: 46px;
+      padding: 0 20px;
+      padding-left: 56px;
+      width: 156px;
+    }
+  }
+}

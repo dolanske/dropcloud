@@ -1,8 +1,9 @@
 <script setup lang='ts'>
-import { useDateFormat } from '@vueuse/shared'
+import { promiseTimeout, useDateFormat } from '@vueuse/shared'
 import { computed, onMounted, ref } from 'vue'
 import { track } from '@vue/reactivity'
 import { onClickOutside } from '@vueuse/core'
+import { useRouter } from 'vue-router'
 import { formatFileSize } from '../bin/utils'
 import { useFile } from '../store/file'
 import { useFolder } from '../store/folder'
@@ -17,6 +18,7 @@ const props = defineProps<{
   file: DbxFolder | DbxFile
 }>()
 
+const router = useRouter()
 const loading = useLoading()
 const files = useFile()
 const folder = useFolder()
@@ -35,6 +37,8 @@ async function updateAudioState() {
   await files.dwFile(props.file.id)
   files.updateAudioState(props.file.id)
   tracklist.$patch({ current: 0 })
+
+  return Promise.resolve()
 }
 
 function goToFile() {
@@ -52,6 +56,11 @@ const tr = ref()
 onMounted(() => {
   onClickOutside(tr, () => open.value = false)
 })
+
+async function openInPlayer() {
+  await updateAudioState()
+  router.push({ name: 'RoutePlayer' })
+}
 </script>
 
 <template>
@@ -92,7 +101,9 @@ onMounted(() => {
         <button @click="updateAudioState">
           Play
         </button>
-        <button>Open in Player</button>
+        <button @click="openInPlayer()">
+          Open in Player
+        </button>
         <button>Add to Queue</button>
         <button>Share Link</button>
       </div>

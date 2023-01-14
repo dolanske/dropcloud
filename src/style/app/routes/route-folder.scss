@@ -98,6 +98,10 @@
                 .material-icons {
                   color: var(--color-text);
                 }
+
+                &:after {
+                  opacity: 0.9 !important;
+                }
               }
             }
           }
@@ -119,16 +123,40 @@
         border-collapse: collapse;
 
         thead tr th {
-          @include font(500);
-          text-align: left;
-          font-size: 1.2rem;
-          text-transform: uppercase;
-          color: var(--color-text-light);
           padding-bottom: 10px;
           padding-top: 10px;
           position: sticky;
           top: 0;
           background-color: var(--color-white);
+          text-align: left;
+
+          &.is-sorting {
+            .material-icons {
+              display: inline-block;
+            }
+          }
+
+          .material-icons {
+            display: none;
+            color: var(--color-primary);
+          }
+
+          button {
+            @include flex(5px);
+            @include font(500);
+            @extend .use-button-hover;
+            cursor: pointer;
+            padding: 0 10px;
+            height: 30px;
+            line-height: 30px;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            color: var(--color-text-light);
+
+            &:after {
+              background-color: var(--color-bg);
+            }
+          }
 
           &:first-child {
             width: 50px !important;

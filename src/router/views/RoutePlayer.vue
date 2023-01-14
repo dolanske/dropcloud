@@ -1,8 +1,10 @@
 <script setup lang='ts'>
-import { computed, reactive, ref, watch } from 'vue'
+import { onClickOutside } from '@vueuse/core'
+import { chunk } from 'lodash'
+import { computed, onMounted, reactive, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { formatDate } from '../../bin/local'
-import { formatFileSize, formatSampleRate, getFormattedlength } from '../../bin/utils'
+import { average, formatFileSize, formatSampleRate, getFormattedlength } from '../../bin/utils'
 import { useFile } from '../../store/file'
 import { useLoading } from '../../store/loading'
 import type { AudioFileNode } from '../../types/audio-types'
@@ -10,6 +12,21 @@ import type { AudioFileNode } from '../../types/audio-types'
 const loading = useLoading()
 const file = useFile()
 const router = useRouter()
+
+/* ---------------- // SECTION // ---------------- */
+// Dynamically control bars
+const availableFfts = [32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768]
+const dropdownOpen = ref(false)
+const dropdownBtn = ref<HTMLButtonElement | null>(null)
+const viz = reactive({
+  bars: 112,
+  color: '#c5c0b2',
+  fftsize: 4096,
+})
+
+onClickOutside(dropdownBtn, () => {
+  dropdownOpen.value = false
+})
 
 /* ---------------- // SECTION // ---------------- */
 // Analyze volumes of an entire song and return an array of values between 0 and 1
@@ -125,7 +142,7 @@ function computeBars() {
   }
 }
 
-window.addEventListener('resize', () => computeBars())
+window.addEventListener('resize', computeBars)
 
 /* ---------------- // SECTION // ---------------- */
 // Controls in Canvas BAR for song progression
@@ -170,12 +187,112 @@ async function goToFolder() {
 // https://developer.mozilla.org/en-US/docs/Web/API/BaseAudioContext/createAnalyser
 // https://github.com/mdn/webaudio-examples/blob/f58a57b47ad4f4ec57bbfe169b3cf79490408b98/voice-change-o-matic/scripts/app.js#L194
 
-// const analyzer =
+// TODO: document
+const CANVAS_VIZ = ref<HTMLCanvasElement>()
+const audioCtx = new AudioContext()
+const analyzer = audioCtx.createAnalyser()
 
-// onMounted(() => {
-//   const ctx = new AudioContext()
-//   const analyzer = ctx.createAnalyser()
-// })
+watch(() => viz.fftsize, (value) => {
+  analyzer.fftSize = value
+  dropdownOpen.value = false
+}, { immediate: true })
+
+// Default size
+// analyzer.fftSize = 4096
+
+// analyzer.minDecibels = -90
+// analyzer.maxDecibels = -10
+// analyzer.smoothingTimeConstant = 0.85
+
+const bufferLength = analyzer.frequencyBinCount
+const dataArray = new Uint8Array(bufferLength)
+
+const src = audioCtx.createMediaElementSource(file.audio)
+
+src.connect(analyzer)
+analyzer.connect(audioCtx.destination)
+
+onMounted(() => {
+  if (CANVAS_VIZ.value && CANVAS_VIZ.value.parentElement) {
+    const width = CANVAS_VIZ.value.parentElement.offsetWidth
+    const height = CANVAS_VIZ.value.parentElement.offsetHeight
+
+    CANVAS_VIZ.value.width = width
+    CANVAS_VIZ.value.height = height
+
+    const ctx = CANVAS_VIZ.value.getContext('2d')
+
+    if (!ctx)
+      return
+
+    drawVisualizer(ctx)
+  }
+})
+
+function drawVisualizer(ctx: CanvasRenderingContext2D) {
+  if (!CANVAS_VIZ.value)
+    return
+
+  // Reset canvas to draw new lines again
+  ctx.clearRect(0, 0, CANVAS_VIZ.value.width, CANVAS_VIZ.value.height)
+
+  // Call itself on the next free draw frame
+  requestAnimationFrame(() => drawVisualizer(ctx))
+
+  // Get data from the audio source
+  analyzer.getByteFrequencyData(dataArray)
+
+  ctx.fillStyle = viz.color
+
+  const _bars = CANVAS_VIZ.value.width / viz.bars
+  const BAR_G = 4
+  const BAR_W = _bars - (_bars / BAR_G)
+
+  // We dont wanna chunk bass notes as those need to be precise
+  // We do not chunk first ten items
+  const SPLIT = Math.floor(viz.bars / 10)
+
+  const bass = dataArray.slice(0, SPLIT)
+  const rest = dataArray.slice(SPLIT + 1)
+  const chunked = chunk(rest, SPLIT)
+
+  // using Array.entries() will return back an array of [index, value] so we do not
+  // have to define addition i and increment it on each loop
+  for (const [index, chunk] of [...bass, ...chunked].entries()) {
+    // const avg = Math.max(...chunk)
+    const avg = typeof chunk === 'number' ? chunk : Math.max(...chunk)
+
+    // Logarhytmically make the peaks louder to create better contrast
+    const avgMultiplied = (avg > 128 ? 1.5 ^ avg : avg) * 1.25
+
+    // TODO: increase darkness depending on the loudness
+
+    ctx.fillRect(
+      index * (BAR_W + BAR_G),
+      CANVAS_VIZ.value.height - avgMultiplied,
+      BAR_W,
+      avgMultiplied,
+    )
+  }
+
+  // for (let i = 0; i < bufferLength / 2; i++) {
+  // barHeight = dataArray[i] * 2
+
+  // ctx.fillStyle = `rgb(${barHeight + 100},50,50)`
+  // ctx.fillRect(
+  //   x,
+  //   CANVAS_VIZ.value.height - barHeight,
+  //   barWidth,
+  //   barHeight,
+  // )
+
+  // x += barWidth + VIZ_GAP
+  // x += i
+  // }
+
+  // ctx.lineTo(CANVAS_VIZ.value.width, CANVAS_VIZ.value.height / 2)
+  // ctx.stroke()
+}
 </script>
 
 <template>
@@ -200,7 +317,6 @@ async function goToFolder() {
             <span>{{ song.extension }}</span>
             <span>{{ formatSampleRate(sampleRate) }}</span>
             <span>{{ formatFileSize(song.size, 2) }}</span>
-
             <span>{{ formatDate(song.client_modified) }}</span>
 
             <div class="horizontal-divider" />
@@ -234,7 +350,38 @@ async function goToFolder() {
         </div>
       </div>
 
-      <div class="route-player-vizualization" />
+      <!-- <div class="container"> -->
+      <div class="canvas-viz-control">
+        <div class="input-item text-input">
+          <label>Bars</label>
+          <input v-model="viz.bars" type="text" placeholder="156">
+        </div>
+
+        <div>
+          <input id="color" v-model="viz.color" type="color" name="color" style="display:none;">
+          <label for="color" class="button btn-blue">Color</label>
+        </div>
+
+        <div ref="dropdownBtn" class="input-item">
+          <button class="button btn-blue" @click="dropdownOpen = !dropdownOpen">
+            FFTSISZE
+            <Icon code="e5cf" size="2" />
+          </button>
+
+          <div class="dropdown" :class="{ 'is-open': dropdownOpen }">
+            <button v-for="size in availableFfts" :key="size" :class="{ 'is-active': size === viz.fftsize }" @click="viz.fftsize = size">
+              {{ size }}
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- </div> -->
+
+      <div class="route-player-vizualization">
+        <div class="canvas-viz-wrapper">
+          <canvas ref="CANVAS_VIZ" />
+        </div>
+      </div>
     </template>
   </div>
 </template>

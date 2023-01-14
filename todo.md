@@ -17,7 +17,13 @@
 - [Player] []  Add a fade in & out when pausing song, dont just cut to 100% or 0% volume volume
 - [Player] []  Fix song progress either being 1 second shorter or 1 second longer when song ends. (possibly just auto set when song stops playing?)
 
+- [RoutePlayer] []  Fix: resizing canvas
+
 --------------
+
+## Tasks #4
+
+- [] Figure out how to vizualize live audio
 
 ## Tasks #3
 
