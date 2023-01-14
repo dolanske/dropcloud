@@ -48,3 +48,15 @@
     background-color: var(--color-primary-light);
   }
 }
+
+.button.btn-gray {
+  @extend .use-button-hover;
+
+  background-color: var(--color-bg);
+  color: var(--color-text);
+
+  &:after {
+    @include radius(0);
+    background-color: var(--color-bg-dark);
+  }
+}

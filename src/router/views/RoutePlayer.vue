@@ -359,11 +359,11 @@ function drawVisualizer(ctx: CanvasRenderingContext2D) {
 
         <div>
           <input id="color" v-model="viz.color" type="color" name="color" style="display:none;">
-          <label for="color" class="button btn-blue">Color</label>
+          <label for="color" class="button btn-gray">Color</label>
         </div>
 
         <div ref="dropdownBtn" class="input-item">
-          <button class="button btn-blue" @click="dropdownOpen = !dropdownOpen">
+          <button class="button btn-gray" @click="dropdownOpen = !dropdownOpen">
             FFTSISZE
             <Icon code="e5cf" size="2" />
           </button>
