@@ -1,18 +1,19 @@
 <script setup lang='ts'>
 import { computed, nextTick, reactive, ref, watch } from 'vue'
 import { onClickOutside } from '@vueuse/core'
-import { useRouter } from 'vue-router'
 import { useFile } from '../store/file'
 import { useTracklist } from '../store/tracklist'
 import { getFormattedlength, now } from '../bin/utils'
 
 import InputSlider from '../components/inputs/InputSlider.vue'
-import { useFolder } from '../store/folder'
+import { useLoading } from '../store/loading'
+import Bar from './global/Bar.vue'
 
 const tracklist = useTracklist()
 const file = useFile()
-const folder = useFolder()
-const router = useRouter()
+const loading = useLoading()
+// const folder = useFolder()
+// const router = useRouter()
 
 // Get relevant files
 const metadata = computed(() => file.audioState.file)
@@ -51,9 +52,9 @@ audio.value.addEventListener('ended', async () => {
 
   // Check for an item in queue
   if (tracklist.queue.length > 0) {
-    const next = tracklist.getNextTrack()
-    await file.dwFile(next)
-    file.updateAudioState(next)
+    console.log('test')
+
+    fetchNextFile()
     return
   }
 
@@ -138,12 +139,26 @@ watch(() => tracklist.shuffleOn, (on) => {
   if (on)
     tracklist.shuffleQueue()
 })
+
+function next() {
+  fetchNextFile()
+}
+
+async function fetchNextFile() {
+  const next = tracklist.getNextTrack()
+  await file.dwFile(next)
+  file.updateAudioState(next)
+}
 </script>
 
 <template>
   <div class="player">
     <div class="container container-player">
       <div v-if="audio" class="player-box">
+        <div v-if="loading.get('file-download')" class="player-loading">
+          <Bar />
+        </div>
+
         <div class="player-control">
           <!-- previous-file -->
 
@@ -161,7 +176,7 @@ watch(() => tracklist.shuffleOn, (on) => {
 
           <!-- next-file -->
 
-          <button data-title-top="Next">
+          <button data-title-top="Next" @click="next()">
             <Icon code="e044" />
           </button>
 

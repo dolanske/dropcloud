@@ -17,6 +17,25 @@
     line-height: 44px;
     padding: 0 5px;
     box-shadow: 1px 3px 10px rgba(#1c1b18, 0.3);
+    position: relative;
+
+    .player-loading {
+      @include radius(5px);
+      position: absolute;
+      inset: 0;
+      z-index: 10;
+      background-color: rgba(#312f2a, 0.5);
+
+      .progress-bar {
+        @include radius(5px 5px 0 0);
+        background-color: var(--color-black);
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: calc(100% - 5px);
+        width: 100%;
+      }
+    }
 
     .player-control {
       @include flex(4px, flex-start, center);

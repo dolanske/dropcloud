@@ -80,6 +80,7 @@ export const useFile = defineStore('file', {
         return Promise.resolve()
 
       loading.set(path)
+      loading.set('file-download')
 
       // Download file from drobpx
       const file = download('/files/download', {
@@ -91,8 +92,10 @@ export const useFile = defineStore('file', {
           const url = URL.createObjectURL(raw)
           const buffer = await raw.arrayBuffer()
           this.registry.set(path, { url, raw, buffer })
-
+        })
+        .finally(() => {
           loading.del(path)
+          loading.del('file-download')
         })
     },
 
