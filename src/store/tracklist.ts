@@ -17,6 +17,7 @@ interface State {
 
   current: number
   limit: number
+  shuffleOn: boolean
 }
 
 export const useTracklist = defineStore('tracklist', {
@@ -25,6 +26,7 @@ export const useTracklist = defineStore('tracklist', {
     queue: [],
     current: 0,
     limit: 100,
+    shuffleOn: false,
   } as State),
   actions: {
     // Adds a history entry
@@ -57,16 +59,27 @@ export const useTracklist = defineStore('tracklist', {
       }
     },
     // Adds a qyeye entry
-    pushQueue(id: string) {
-      this.queue.unshift(id)
+    // pushQueue(id: string) {
+    //   this.queue.push(id)
+    // },
+    // removeQueryAtIndex(index: number) {
+    //   this.queue.splice(0, index)
+    // },
+    // getNextQuery() {
+    //   const next = this.queue[0]
+    //   this.setQueryIndexAsStart(1)
+    //   return next
+    // },
+    getNextTrack() {
+      const next = this.queue[0]
+      this.setQueryIndexAsStart(1)
+      return next
     },
-    removeQueryAtIndex(index: number) {
-      this.queue.splice(0, index)
-    },
+
     // Remove all tracks between the start and the index
     // And fill in the mount of missing queue items
     setQueryIndexAsStart(index: number) {
-      this.queue = this.queue.splice(0, index)
+      this.queue.splice(0, index)
       this.shuffleQueue()
     },
     getPrevInHistory() {

@@ -115,7 +115,7 @@
     z-index: -1;
   }
 
-  &.is-active,
+  &.is-active:after,
   &:hover:after {
     opacity: 1;
     height: 100%;

@@ -13,19 +13,19 @@
     @include grid(0, 1fr 388px 1fr);
     align-items: center;
     background-color: var(--color-black);
-    height: 48px;
-    line-height: 48px;
+    height: 44px;
+    line-height: 44px;
     padding: 0 5px;
     box-shadow: 1px 3px 10px rgba(#1c1b18, 0.3);
 
     .player-control {
-      @include flex(0, flex-start, center);
+      @include flex(4px, flex-start, center);
 
       button {
         @extend .use-button-hover;
         @include flex(0, center, center);
-        width: 40px;
-        height: 40px;
+        width: 36px;
+        height: 36px;
         border: none;
         background-color: transparent;
         position: relative;

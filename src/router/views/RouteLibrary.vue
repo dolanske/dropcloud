@@ -37,7 +37,7 @@ function toggleSorting(type: Sorting['type']) {
 }
 
 // Recursively creates a nested object of folders and their subfolders
-const add = (source: string, target: Record<any, any>) => {
+function add(source: string, target: Record<any, any>) {
   // Splits path by nesting
   const paths = source.split('/')
   // Returns first item from path
@@ -175,4 +175,3 @@ const sortedFiles = computed(() => {
     <!-- <a :href="url">Login</a> -->
   </div>
 </template>
-

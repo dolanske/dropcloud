@@ -1,10 +1,10 @@
 <script setup lang='ts'>
-import { computed, nextTick, reactive, ref, unref, watch, watchEffect } from 'vue'
+import { computed, nextTick, reactive, ref, watch } from 'vue'
 import { onClickOutside } from '@vueuse/core'
 import { useRouter } from 'vue-router'
 import { useFile } from '../store/file'
 import { useTracklist } from '../store/tracklist'
-import { formatPathWithoutName, getFormattedlength, now } from '../bin/utils'
+import { getFormattedlength, now } from '../bin/utils'
 
 import InputSlider from '../components/inputs/InputSlider.vue'
 import { useFolder } from '../store/folder'
@@ -34,7 +34,7 @@ const repeat = ref(false)
 
 /* ---------------- // SECTION // ---------------- */
 // Audio events
-audio.value.addEventListener('timeupdate', (e: any) => {
+audio.value.addEventListener('timeupdate', () => {
   if (!file.audioState.playing)
     return
 
@@ -42,11 +42,18 @@ audio.value.addEventListener('timeupdate', (e: any) => {
 })
 
 audio.value.addEventListener('ended', async () => {
+  // If we have set repeat ON, just toggle play when it ends
   if (repeat.value) {
-    // If we have set repeat ON, just toggle play when it ends
     await nextTick()
     file.play()
+    return
+  }
 
+  // Check for an item in queue
+  if (tracklist.queue.length > 0) {
+    const next = tracklist.getNextTrack()
+    await file.dwFile(next)
+    file.updateAudioState(next)
     return
   }
 
@@ -121,6 +128,16 @@ async function previous() {
   await file.dwFile(track)
   file.updateAudioState(track)
 }
+
+/* ---------------- // SECTION // ---------------- */
+// Keep track of queue
+
+watch(() => tracklist.shuffleOn, (on) => {
+  tracklist.queue = []
+
+  if (on)
+    tracklist.shuffleQueue()
+})
 </script>
 
 <template>
@@ -150,7 +167,7 @@ async function previous() {
 
           <!-- shuffle -->
 
-          <button data-title-top="Shuffle" @click="tracklist.shuffleQueue()">
+          <button class="blue" data-title-top="Shuffle" :class="{ 'is-active': tracklist.shuffleOn }" @click="tracklist.shuffleOn = !tracklist.shuffleOn">
             <Icon code="e043" />
           </button>
 

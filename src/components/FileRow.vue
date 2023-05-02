@@ -1,7 +1,6 @@
 <script setup lang='ts'>
-import { promiseTimeout, useDateFormat } from '@vueuse/shared'
+import { useDateFormat } from '@vueuse/shared'
 import { computed, onMounted, ref } from 'vue'
-import { track } from '@vue/reactivity'
 import { onClickOutside } from '@vueuse/core'
 import { useRouter } from 'vue-router'
 import { formatFileSize } from '../bin/utils'
