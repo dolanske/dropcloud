@@ -150,7 +150,7 @@ async function previous() {
 
           <!-- shuffle -->
 
-          <button data-title-top="Shuffle">
+          <button data-title-top="Shuffle" @click="tracklist.shuffleQueue()">
             <Icon code="e043" />
           </button>
 

@@ -9,6 +9,11 @@
   &.container-player {
     width: 1024px;
   }
+
+  &.container-full {
+    width: 100%;
+    max-width: 1920px;
+  }
 }
 
 #app {

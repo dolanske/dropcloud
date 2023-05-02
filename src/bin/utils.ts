@@ -89,3 +89,10 @@ export function formatSampleRate(number: number) {
 
 // Creates an average from the provided array of numbers
 export const average = (arr: number[]) => arr.reduce((p, c) => p + c, 0) / arr.length
+
+// Returns a pseudo random number in the user defiend range
+export function rndMinMax(min: number, max: number) {
+  min = Math.ceil(min)
+  max = Math.floor(max)
+  return Math.floor(Math.random() * (max - min + 1)) + min
+}
