@@ -42,9 +42,7 @@ export const useFolder = defineStore('folder', {
   getters: {
     getFolderData: state => (name: string) => {
       return state.folders.find((folder) => {
-        const endOfPath = folder.path_lower.split('/').at(-1)
-
-        return endOfPath === name
+        return folder.path_lower.split('/').at(-1) === name
       })
     },
     getItemAmountInPath: state => (path: string) => {
